@@ -29,6 +29,20 @@ npm run build
 
 Serveur local habituel : `http://127.0.0.1:3333`.
 
+## Déploiement GitHub Pages
+
+- Repo : `https://github.com/mazen-create11/maylune-store` (main = source, gh-pages = build)
+- URL live : `https://mazen-create11.github.io/maylune-store/`
+- Piège payé : en export statique, next/image ne préfixe pas `basePath` sur les src → `image-loader.js` (custom loader) est obligatoire, ne pas le supprimer.
+
+```bash
+GITHUB_PAGES=1 npx next build
+touch out/.nojekyll
+cd out && git init -b gh-pages -q && git add -A && git commit -q -m "deploy" \
+  && git push -f https://github.com/mazen-create11/maylune-store.git gh-pages
+cd .. && rm -rf out/.git
+```
+
 ## État au 3 août 2026
 
 Lint, trois tests, build Next.js et parcours automatisé desktop/mobile validés. Le panier, la FAQ, le menu mobile et le configurateur jusqu’à 107 € ont été testés sans erreur navigateur ni débordement horizontal.
