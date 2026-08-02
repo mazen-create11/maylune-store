@@ -563,12 +563,11 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
   .product-grid { grid-template-columns: repeat(2, 1fr); row-gap: 45px; }
   .product-choose { opacity: 1; transform: none; }
   .config-shell { display: block; }
-  .config-visual { padding-bottom: 18px; }
-  .main-preview { position: relative; top: 0; min-height: 90vw; }
-  .detail-preview { position: relative; top: 0; width: calc(100% - 40px); min-height: 290px; margin: -50px 20px 18px auto; }
-  .detail-preview > img { height: 165px !important; }
-  .detail-preview figcaption { min-height: 125px; }
-  .preview-note { position: relative; top: 0; margin-bottom: 0; }
+  .config-visual { padding-bottom: 0; }
+  .main-preview { position: relative; top: 0; min-height: 108vw; }
+  /* mobile : l'aperçu détail dupliquait la photo principale et chevauchait son bandeau — une seule image, nette */
+  .detail-preview { display: none; }
+  .preview-note { position: relative; top: 0; width: 100%; margin: 0; padding: 13px 20px; }
   .step-content { min-height: auto; }
   .value-story { grid-template-columns: 1fr; }
   .value-image { min-height: 90vw; }
