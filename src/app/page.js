@@ -1,7 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { commerceReady, createCheckout } from '../lib/shopify';
+
+const CART_KEY = 'maylune-cart-v1';
 
 const products = [
   {
@@ -14,6 +17,8 @@ const products = [
     badge: 'Bestseller',
     usage: 'Pour sortir légère',
     capacity: 'Téléphone · cartes · rouge à lèvres',
+    carry: 'Main ou chaîne',
+    opening: 'Rabat structuré',
     plaquePosition: { left: '57%', top: '58%' },
     previewPosition: 'center',
   },
@@ -27,6 +32,8 @@ const products = [
     badge: 'Signature',
     usage: 'Pour tous les jours',
     capacity: 'Portefeuille · clés · lunettes · carnet',
+    carry: 'Épaule',
+    opening: 'Ouverture souple',
     plaquePosition: { left: '56%', top: '80%' },
     previewPosition: 'center',
   },
@@ -40,6 +47,8 @@ const products = [
     badge: 'Grande capacité',
     usage: 'Pour les journées pleines',
     capacity: 'Tablette · trousse · bouteille',
+    carry: 'Épaule',
+    opening: 'Grande ouverture',
     plaquePosition: { left: '50%', top: '52%' },
     previewPosition: 'center',
   },
@@ -53,6 +62,8 @@ const products = [
     badge: 'Petit format',
     usage: 'Pour le soir',
     capacity: 'Téléphone · cartes · écouteurs',
+    carry: 'Épaule',
+    opening: 'Ouverture souple',
     plaquePosition: { left: '68%', top: '65%' },
     previewPosition: '69% center',
   },
@@ -154,7 +165,7 @@ const faqs = [
   },
   {
     q: 'Que puis-je réellement personnaliser ?',
-    a: 'La silhouette, l’accord de couleurs, le type d’anse, la chaîne, la poche intérieure et jusqu’à trois initiales sur la plaque. Le prix se met à jour à chaque ajout.',
+    a: 'Vous choisissez la silhouette, l’un des quatre accords de couleurs et les finitions compatibles avec ce modèle. La plaque peut recevoir jusqu’à trois initiales. Le prix se met à jour à chaque ajout.',
   },
   {
     q: 'Le sac garde-t-il sa forme ?',
@@ -174,7 +185,7 @@ const faqs = [
   },
   {
     q: 'Livrez-vous hors de France ?',
-    a: 'Oui. Les destinations, délais et frais disponibles sont indiqués au moment du paiement selon votre adresse.',
+    a: 'Les destinations, délais et frais seront affichés précisément au paiement selon votre adresse. Aucune commande n’est engagée avant ce récapitulatif.',
   },
 ];
 
@@ -234,11 +245,12 @@ function ProductCard({ product, onChoose }) {
       <div className="product-media">
         <Image src={product.image} alt={product.alt} fill sizes="(max-width: 760px) 82vw, 25vw" />
         <span className="product-badge">{product.badge}</span>
-        <button type="button" className="product-choose" onClick={() => onChoose(product)}>Partir de cette forme <ArrowIcon /></button>
+        <button type="button" className="product-choose" onClick={() => onChoose(product)}>Composer ce modèle <ArrowIcon /></button>
       </div>
       <div className="product-heading"><div><span>{product.type}</span><h3>{product.name}</h3></div><strong>Dès {product.price} €</strong></div>
       <p className="product-usage">{product.usage}</p>
       <p className="product-capacity">{product.capacity}</p>
+      <dl className="product-specs"><div><dt>Porté</dt><dd>{product.carry}</dd></div><div><dt>Accès</dt><dd>{product.opening}</dd></div></dl>
     </article>
   );
 }
@@ -247,6 +259,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [cart, setCart] = useState([]);
+  const [cartHydrated, setCartHydrated] = useState(false);
+  const [checkoutState, setCheckoutState] = useState('idle');
   const [selectedProduct, setSelectedProduct] = useState(products[1]);
   const [palette, setPalette] = useState(palettes[2]);
   const [selectedFinishes, setSelectedFinishes] = useState(['braid']);
@@ -254,6 +268,9 @@ export default function Home() {
   const [activeStep, setActiveStep] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const [notice, setNotice] = useState('');
+  const menuCloseRef = useRef(null);
+  const cartCloseRef = useRef(null);
+  const lastTriggerRef = useRef(null);
   const [focus, setFocus] = useState({
     type: 'Silhouette',
     title: products[1].name,
@@ -276,6 +293,39 @@ export default function Home() {
     return () => document.body.classList.remove('locked');
   }, [menuOpen, cartOpen]);
 
+  useEffect(() => {
+    let savedCart = [];
+    try {
+      const storedCart = JSON.parse(window.localStorage.getItem(CART_KEY) || '[]');
+      if (Array.isArray(storedCart)) savedCart = storedCart;
+    } catch {
+      window.localStorage.removeItem(CART_KEY);
+    }
+    const frame = window.requestAnimationFrame(() => {
+      setCart(savedCart);
+      setCartHydrated(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    if (cartHydrated) window.localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }, [cart, cartHydrated]);
+
+  useEffect(() => {
+    const drawerClose = menuOpen ? menuCloseRef.current : cartOpen ? cartCloseRef.current : null;
+    if (!drawerClose) return undefined;
+    drawerClose.focus();
+    const handleEscape = (event) => {
+      if (event.key !== 'Escape') return;
+      setMenuOpen(false);
+      setCartOpen(false);
+      window.requestAnimationFrame(() => lastTriggerRef.current?.focus());
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [menuOpen, cartOpen]);
+
   const availableFinishes = finishSets[selectedProduct.id];
   const paletteImage = paletteVisuals[selectedProduct.id][palette.id];
   const optionTotal = availableFinishes.filter((finish) => selectedFinishes.includes(finish.id)).reduce((sum, finish) => sum + finish.price, 0);
@@ -289,20 +339,71 @@ export default function Home() {
     window.setTimeout(() => setNotice(''), 2400);
   }
 
-  function addToCart(item) {
+  function openDrawer(type, trigger) {
+    lastTriggerRef.current = trigger;
+    setMenuOpen(type === 'menu');
+    setCartOpen(type === 'cart');
+  }
+
+  function closeDrawers() {
+    setMenuOpen(false);
+    setCartOpen(false);
+    window.requestAnimationFrame(() => lastTriggerRef.current?.focus());
+  }
+
+  function trapFocus(event) {
+    if (event.key !== 'Tab') return;
+    const focusable = [...event.currentTarget.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')];
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function addToCart(item, trigger) {
+    lastTriggerRef.current = trigger;
     setCart((current) => [...current, item]);
     setCartOpen(true);
     showNotice(`${item.name} a été ajouté au panier`);
   }
 
-  function addConfiguredBag() {
+  function addConfiguredBag(trigger) {
+    const configurationId = crypto.randomUUID();
     addToCart({
-      id: `${selectedProduct.id}-${crypto.randomUUID()}`,
+      id: `${selectedProduct.id}-${configurationId}`,
+      configurationId,
+      productId: selectedProduct.id,
+      productName: selectedProduct.name,
+      paletteName: palette.name,
+      finishIds: [...selectedFinishes],
+      finishNames: [...selectedDetails],
+      initials,
       name: `${selectedProduct.name} personnalisé`,
       price: total,
       image: paletteImage,
       details: `${palette.name} · ${selectedDetails.join(', ')}${initials ? ` · ${initials}` : ''}`,
-    });
+    }, trigger);
+  }
+
+  async function proceedToCheckout() {
+    if (!commerceReady) {
+      showNotice('Le paiement sécurisé sera activé à l’ouverture des commandes.');
+      return;
+    }
+    try {
+      setCheckoutState('loading');
+      const checkout = await createCheckout(cart);
+      window.location.assign(checkout.checkoutUrl);
+    } catch (error) {
+      setCheckoutState('error');
+      showNotice(error instanceof Error ? error.message : 'Le paiement est momentanément indisponible.');
+    }
   }
 
   function selectProduct(product, scroll = false) {
@@ -312,7 +413,7 @@ export default function Home() {
     setFocus({ type: 'Silhouette', title: product.name, copy: `${product.usage} · ${product.capacity}`, image: paletteVisuals[product.id][palette.id], position: 'center' });
     if (scroll) {
       setActiveStep(0);
-      window.setTimeout(() => document.querySelector('#personnaliser')?.scrollIntoView({ behavior: 'smooth' }), 50);
+      window.setTimeout(() => document.querySelector('#config-start')?.scrollIntoView({ behavior: 'smooth' }), 50);
     }
   }
 
@@ -363,55 +464,57 @@ export default function Home() {
       </div>
 
       <header className="site-header">
-        <button type="button" className="icon-button mobile-only" onClick={() => setMenuOpen(true)} aria-label="Ouvrir le menu"><MenuIcon /></button>
+        <button type="button" className="icon-button mobile-only" onClick={(event) => openDrawer('menu', event.currentTarget)} aria-label="Ouvrir le menu"><MenuIcon /></button>
         <nav className="desktop-nav" aria-label="Navigation principale">
-          <a href="#collection">Les silhouettes</a><a href="#personnaliser">Composer</a><a href="#savoir-faire">Le geste</a>
+          <a href="#collection">Les silhouettes</a><a href="#config-start">Composer</a><a href="#savoir-faire">Le geste</a>
         </nav>
         <a href="#content" className="logo-link"><Brand /></a>
-        <div className="header-actions"><a className="desktop-link" href="#faq">FAQ</a><button type="button" className="cart-button" onClick={() => setCartOpen(true)}><BagIcon /><span>Panier</span><b>{cart.length}</b></button></div>
+        <div className="header-actions"><a className="desktop-link" href="#faq">FAQ</a><button type="button" className="cart-button" onClick={(event) => openDrawer('cart', event.currentTarget)}><BagIcon /><span>Panier</span><b>{cart.length}</b></button></div>
       </header>
 
-      <aside className={`drawer menu-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
-        <div className="drawer-head"><Brand /><button type="button" className="icon-button" onClick={() => setMenuOpen(false)} aria-label="Fermer le menu"><CloseIcon /></button></div>
-        <nav>{['Les silhouettes', 'Composer mon sac', 'Le savoir-faire', 'FAQ'].map((item, index) => <a key={item} href={['#collection', '#personnaliser', '#savoir-faire', '#faq'][index]} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{item}<ArrowIcon /></a>)}</nav>
-        <p>Une question ? <a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a></p>
+      <aside className={`drawer menu-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen} inert={!menuOpen} role="dialog" aria-modal="true" aria-label="Menu" onKeyDown={trapFocus}>
+        <div className="drawer-head"><Brand /><button ref={menuCloseRef} type="button" className="icon-button" onClick={closeDrawers} aria-label="Fermer le menu"><CloseIcon /></button></div>
+        <nav>{['Les silhouettes', 'Composer mon sac', 'Le savoir-faire', 'FAQ'].map((item, index) => <a key={item} href={['#collection', '#config-start', '#savoir-faire', '#faq'][index]} onClick={closeDrawers}><span>0{index + 1}</span>{item}<ArrowIcon /></a>)}</nav>
+        <p>Les coordonnées de l’atelier seront publiées avant l’ouverture des commandes.</p>
       </aside>
 
-      <aside className={`drawer cart-drawer ${cartOpen ? 'open' : ''}`} aria-hidden={!cartOpen}>
-        <div className="drawer-head"><div><span className="micro-label">Votre sélection</span><h2>Le panier</h2></div><button type="button" className="icon-button" onClick={() => setCartOpen(false)} aria-label="Fermer le panier"><CloseIcon /></button></div>
-        {cart.length === 0 ? <div className="empty-cart"><BagIcon /><h3>Commencez par une forme.</h3><p>Puis choisissez ce qui la rendra vraiment vôtre.</p><a className="button button-dark" href="#collection" onClick={() => setCartOpen(false)}>Voir les silhouettes</a></div> : <>
-          <div className="cart-items">{cart.map((item, index) => <article className="cart-item" key={`${item.id}-${index}`}><div className="cart-thumb"><Image src={item.image} alt="" fill sizes="88px" /></div><div><h3>{item.name}</h3><p>{item.details}</p><strong>{item.price} €</strong></div><button type="button" onClick={() => setCart((current) => current.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Retirer ${item.name}`}>×</button></article>)}</div>
-          <div className="cart-footer"><div><span>Sous-total</span><strong>{cartTotal} €</strong></div><p>Livraison calculée avant le paiement.</p><button type="button" className="button button-accent">Passer au paiement <ArrowIcon /></button><div className="secure-copy"><CheckIcon /> Paiement chiffré et sécurisé</div><PaymentLogos /></div>
+      <aside className={`drawer cart-drawer ${cartOpen ? 'open' : ''}`} aria-hidden={!cartOpen} inert={!cartOpen} role="dialog" aria-modal="true" aria-label="Panier" onKeyDown={trapFocus}>
+        <div className="drawer-head"><div><span className="micro-label">Votre sélection</span><h2>Le panier</h2></div><button ref={cartCloseRef} type="button" className="icon-button" onClick={closeDrawers} aria-label="Fermer le panier"><CloseIcon /></button></div>
+        {cart.length === 0 ? <div className="empty-cart"><BagIcon /><h3>Commencez par une forme.</h3><p>Puis choisissez ce qui la rendra vraiment vôtre.</p><a className="button button-dark" href="#collection" onClick={closeDrawers}>Voir les silhouettes</a></div> : <>
+          <div className="cart-items">{cart.map((item) => <article className="cart-item" key={item.id}><div className="cart-thumb"><Image src={item.image} alt="" fill sizes="88px" /></div><div><h3>{item.name}</h3><p>{item.details}</p><strong>{item.price} €</strong></div><button type="button" onClick={() => setCart((current) => current.filter((currentItem) => currentItem.id !== item.id))} aria-label={`Retirer ${item.name}`}>×</button></article>)}</div>
+          <div className="cart-footer"><div><span>Sous-total</span><strong>{cartTotal} €</strong></div><p>{cartTotal >= 79 ? 'Livraison offerte en France métropolitaine.' : `Encore ${79 - cartTotal} € pour profiter de la livraison offerte.`}</p><button type="button" className={`button button-accent ${commerceReady ? '' : 'button-pending'}`} onClick={proceedToCheckout} aria-disabled={!commerceReady || checkoutState === 'loading'}>{checkoutState === 'loading' ? 'Préparation du paiement…' : commerceReady ? 'Passer au paiement' : 'Commandes bientôt ouvertes'} <ArrowIcon /></button>{commerceReady ? <><div className="secure-copy"><CheckIcon /> Paiement Shopify chiffré et sécurisé</div><PaymentLogos /></> : <div className="checkout-disclosure"><CheckIcon /> Votre composition est conservée sur cet appareil. Le paiement sera activé à l’ouverture.</div>}</div>
         </>}
       </aside>
-      <button type="button" className={`drawer-overlay ${menuOpen || cartOpen ? 'show' : ''}`} onClick={() => { setMenuOpen(false); setCartOpen(false); }} aria-label="Fermer" />
+      <button type="button" className={`drawer-overlay ${menuOpen || cartOpen ? 'show' : ''}`} onClick={closeDrawers} aria-label="Fermer" />
       <div className={`toast ${notice ? 'show' : ''}`} role="status"><CheckIcon />{notice}</div>
 
       <section className="hero" id="content">
         <div className="hero-copy">
           <p className="eyebrow">Sacs au crochet · composés par vous</p>
-          <h1>Le sac que personne n’aura choisi <em>à votre place.</em></h1>
-          <p className="hero-lead">Choisissez une silhouette, mariez deux couleurs et ajoutez les détails qui vous servent vraiment. Nous crochetons votre composition à la commande.</p>
-          <div className="hero-actions"><a className="button button-accent" href="#personnaliser">Créer ma signature <ArrowIcon /></a><a className="text-link" href="#collection">Voir les quatre formes</a></div>
-          <ul className="hero-facts"><li><b>Dès 55 €</b><span>prix mis à jour en direct</span></li><li><b>7–12 jours</b><span>de confection estimée</span></li><li><b>4 décisions</b><span>guidées pas à pas</span></li></ul>
+          <h1>Votre style mérite mieux qu’un sac <em>déjà vu.</em></h1>
+          <p className="hero-lead">Partez de votre façon de vous habiller. Choisissez la forme, l’accord de couleurs et les détails qui feront de votre MAYLUNE le point juste de chaque tenue. Nous le crochetons à la commande.</p>
+          <div className="hero-actions"><a className="button button-accent" href="#config-start">Créer ma signature <ArrowIcon /></a><a className="text-link" href="#collection">Comparer les quatre formats</a></div>
+          <ul className="hero-facts"><li><b>Dès 55 €</b><span>prix mis à jour en direct</span></li><li><b>7–12 jours</b><span>estimation de confection</span></li><li><b>4 étapes</b><span>avec votre modèle à l’écran</span></li></ul>
         </div>
         <figure className="hero-visual">
-          <Image src="/images/hero-maylune.webp" alt="Mini sac MAYLUNE rouge tomate et vanille porté avec une tenue en lin" fill priority sizes="(max-width: 800px) 100vw, 55vw" />
+          <Image src="/images/hero-maylune.webp" alt="Mini sac MAYLUNE rouge tomate et vanille porté avec une tenue en lin" fill priority fetchPriority="high" sizes="(max-width: 800px) 100vw, 55vw" />
+          <a className="mobile-hero-cta button button-light" href="#config-start">Créer ma signature <ArrowIcon /></a>
           <figcaption><span>Mini Muse</span><strong>Dolce Vita</strong></figcaption>
           <div className="hero-seal"><span>M</span><small>Composé<br />pour vous</small></div>
         </figure>
       </section>
 
-      <section className="proof-rail" aria-label="Les engagements MAYLUNE"><div><span>01</span><p><b>Chaque palette</b> montrée sur la forme choisie</p></div><div><span>02</span><p><b>Chaque détail</b> adapté aux proportions du modèle</p></div><div><span>03</span><p><b>Votre prix</b> calculé sans surprise</p></div></section>
+      <section className="proof-rail" aria-label="Les engagements MAYLUNE" tabIndex={0}><div><span>01</span><p><b>4 silhouettes</b> selon ce que vous emportez</p></div><div><span>02</span><p><b>16 aperçus</b> sur le modèle réellement choisi</p></div><div><span>03</span><p><b>Prix final</b> connu avant le panier</p></div></section>
 
       <section className="collection section" id="collection">
         <div className="section-heading reveal"><div><p className="eyebrow">01 · Trouver le bon format</p><h2>Commencez par ce que votre sac doit faire <em>pour vous.</em></h2></div><p>Un mini pour sortir, une forme souple au quotidien ou un cabas qui suit toute la journée. Le style vient ensuite.</p></div>
-        <div className="product-grid">{products.map((product) => <ProductCard key={product.id} product={product} onChoose={(item) => selectProduct(item, true)} />)}</div>
+        <div className="carousel-hint"><span>Glissez pour comparer</span><strong>01 — 04</strong></div>
+        <div className="product-grid" tabIndex={0} aria-label="Comparer les quatre silhouettes">{products.map((product) => <ProductCard key={product.id} product={product} onChoose={(item) => selectProduct(item, true)} />)}</div>
       </section>
 
       <section className="campaign-band reveal">
         <Image src="/images/campaign.webp" alt="Trois femmes portant des sacs MAYLUNE colorés au bord de la Méditerranée" fill sizes="100vw" />
-        <div className="campaign-overlay"><p className="eyebrow">Une couleur suffit parfois</p><h2>Le détail qui change toute la tenue.</h2><p>Sur un jean, un ensemble neutre ou une robe noire : votre composition devient le point d’attention, pas un accessoire de plus.</p><a className="button button-light" href="#personnaliser">Trouver mon accord <ArrowIcon /></a></div>
+        <div className="campaign-overlay"><p className="eyebrow">Une couleur suffit parfois</p><h2>Le détail qui change toute la tenue.</h2><p>Sur un jean, un ensemble neutre ou une robe noire : votre composition devient le point d’attention, pas un accessoire de plus.</p><a className="button button-light" href="#config-start">Trouver mon accord <ArrowIcon /></a></div>
       </section>
 
       <section className="configurator section" id="personnaliser">
@@ -432,27 +535,32 @@ export default function Home() {
             <p className="preview-note"><CheckIcon /> Simulation sur votre {selectedProduct.name} · fils validés avant confection</p>
           </div>
 
-          <div className="config-panel">
+          <div className="config-panel" id="config-start">
+            <figure className="mobile-config-preview">
+              <Image key={`mobile-${configuredPreviewImage}`} src={configuredPreviewImage} alt={`Aperçu de ${selectedProduct.name} dans la palette ${palette.name}`} fill sizes="100vw" style={{ objectPosition: activeStep === 2 && focus.type === 'Détail' ? focus.position : selectedProduct.previewPosition }} />
+              {activeStep === 3 && initials && <span className="preview-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials}</span>}
+              <figcaption><span>{selectedProduct.name}</span><strong>{palette.name}</strong></figcaption>
+            </figure>
             <div className="config-top">
               <div className="config-top-main"><span>Votre composition</span><strong>{selectedProduct.name} · {palette.name}</strong><small>{selectedDetails.join(' · ')}{initials ? ` · Initiales ${initials}` : ''}</small></div>
               <div className="config-top-price"><b>{total} €</b>{total > selectedProduct.price && <small>{selectedProduct.name} {selectedProduct.price} € + options {total - selectedProduct.price} €</small>}</div>
             </div>
-            <nav className="stepper" aria-label="Étapes de personnalisation">{steps.map((step, index) => <button type="button" key={step} className={`${index === activeStep ? 'active' : ''} ${index < activeStep ? 'done' : ''}`} onClick={() => setActiveStep(index)}><span>{index < activeStep ? <CheckIcon /> : `0${index + 1}`}</span><b>{step}</b></button>)}</nav>
+            <nav className="stepper" aria-label="Étapes de personnalisation">{steps.map((step, index) => <button type="button" key={step} className={`${index === activeStep ? 'active' : ''} ${index < activeStep ? 'done' : ''}`} onClick={() => setActiveStep(index)} aria-current={index === activeStep ? 'step' : undefined} aria-label={`${step}, étape ${index + 1} sur 4`}><span>{index < activeStep ? <CheckIcon /> : `0${index + 1}`}</span><b>{step}</b></button>)}</nav>
 
             <div className="step-content">
-              {activeStep === 0 && <section className="choice-step"><header><span>Étape 1 sur 4</span><h3>Quel rythme aura votre sac ?</h3><p>Choisissez selon ce que vous emportez, pas seulement selon la photo.</p></header><div className="shape-options">{products.map((product) => <button type="button" key={product.id} className={selectedProduct.id === product.id ? 'selected' : ''} onClick={() => selectProduct(product)}><span className="choice-photo"><Image src={product.image} alt="" fill sizes="96px" /></span><span className="choice-copy"><b>{product.name}</b><small>{product.usage}</small><em>{product.capacity}</em></span><strong>{product.price} €</strong>{selectedProduct.id === product.id && <i><CheckIcon /></i>}</button>)}</div></section>}
+              {activeStep === 0 && <section className="choice-step"><header><span>Étape 1 sur 4</span><h3>Quel rythme aura votre sac ?</h3><p>Choisissez selon ce que vous emportez, pas seulement selon la photo.</p></header><div className="shape-options">{products.map((product) => <button type="button" key={product.id} className={selectedProduct.id === product.id ? 'selected' : ''} onClick={() => selectProduct(product)} aria-pressed={selectedProduct.id === product.id}><span className="choice-photo"><Image src={product.image} alt="" fill sizes="96px" /></span><span className="choice-copy"><b>{product.name}</b><small>{product.usage}</small><em>{product.capacity}</em></span><strong>{product.price} €</strong>{selectedProduct.id === product.id && <i><CheckIcon /></i>}</button>)}</div></section>}
 
-              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4 · {selectedProduct.name}</span><h3>Habillez votre {selectedProduct.name}.</h3><p>Les quatre accords sont appliqués à cette forme précise — proportions, anses et plaque comprises.</p></header><div className="palette-cards">{palettes.map((option) => <button type="button" key={option.name} className={palette.name === option.name ? 'selected' : ''} onClick={() => selectPalette(option)} aria-label={`${option.name} sur ${selectedProduct.name}`}><span className="palette-photo"><Image src={paletteVisuals[selectedProduct.id][option.id]} alt={`${selectedProduct.name} dans la palette ${option.name}`} fill sizes="180px" style={{ objectPosition: selectedProduct.previewPosition }} /></span><span className="palette-card-copy"><span className="duo-swatch" style={{ '--c1': option.colors[0], '--c2': option.colors[1] }} /><small>{option.mood}</small><b>{option.name}</b><em>{option.label}</em><p>{option.benefit}</p></span>{palette.name === option.name && <i><CheckIcon /></i>}</button>)}</div></section>}
+              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4 · {selectedProduct.name}</span><h3>Habillez votre {selectedProduct.name}.</h3><p>Les quatre accords sont appliqués à cette forme précise — proportions, anses et plaque comprises.</p></header><div className="palette-cards">{palettes.map((option) => <button type="button" key={option.name} className={palette.name === option.name ? 'selected' : ''} onClick={() => selectPalette(option)} aria-label={`${option.name} sur ${selectedProduct.name}`} aria-pressed={palette.name === option.name}><span className="palette-photo"><Image src={paletteVisuals[selectedProduct.id][option.id]} alt={`${selectedProduct.name} dans la palette ${option.name}`} fill sizes="180px" style={{ objectPosition: selectedProduct.previewPosition }} /></span><span className="palette-card-copy"><span className="duo-swatch" style={{ '--c1': option.colors[0], '--c2': option.colors[1] }} /><small>{option.mood}</small><b>{option.name}</b><em>{option.label}</em><p>{option.benefit}</p></span>{palette.name === option.name && <i><CheckIcon /></i>}</button>)}</div></section>}
 
-              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4 · {selectedProduct.name}</span><h3>{selectedProduct.name}, jusque dans les détails.</h3><p>Uniquement les finitions compatibles avec cette forme, montrées sur le bon modèle.</p></header><div className="finish-cards">{availableFinishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); const finishImage = finish.image || paletteImage; return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-photo"><Image src={finishImage} alt={`${finish.name} sur ${selectedProduct.name}`} fill sizes="180px" style={{ objectPosition: finish.position || 'center' }} /></span><span className="finish-card-copy"><b>{finish.name}</b><small>{finish.short}</small><p>{finish.benefit}</p><strong>{finish.price ? `+${finish.price} €` : 'Inclus'}</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
+              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4 · {selectedProduct.name}</span><h3>{selectedProduct.name}, jusque dans les détails.</h3><p>Uniquement les finitions compatibles avec cette forme, montrées sur le bon modèle.</p></header><div className="finish-cards" tabIndex={0} aria-label={`Finitions disponibles pour ${selectedProduct.name}`}>{availableFinishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); const finishImage = finish.image || paletteImage; return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-photo"><Image src={finishImage} alt={`${finish.name} sur ${selectedProduct.name}`} fill sizes="180px" style={{ objectPosition: finish.position || 'center' }} /></span><span className="finish-card-copy"><b>{finish.name}</b><small>{finish.short}</small><p>{finish.benefit}</p><strong>{finish.price ? `+${finish.price} €` : 'Inclus'}</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
 
               {activeStep === 3 && <section className="choice-step monogram-step"><header><span>Étape 4 sur 4 · {selectedProduct.name}</span><h3>Signez votre {selectedProduct.name}.</h3><p>La plaque est simulée sur votre modèle dans la palette {palette.name}. Jusqu’à trois lettres, toujours facultatives.</p></header><div className="monogram-layout"><div className="monogram-photo"><Image src={paletteImage} alt={`${selectedProduct.name} ${palette.name} avec aperçu de plaque`} fill sizes="240px" style={{ objectPosition: selectedProduct.previewPosition }} /><span className="monogram-photo-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials || 'ML'}</span></div><div className="monogram-control"><span className="gold-plaque">{initials || 'ML'}</span><label htmlFor="initials">Vos initiales <small>+8 €</small></label><div><input id="initials" value={initials} onChange={(event) => updateInitials(event.target.value)} placeholder="Ex. AL" maxLength={3} /><span>{initials.length}/3</span></div><p>Aperçu positionné sur votre {selectedProduct.name}. La taille finale est validée par l’atelier.</p></div></div></section>}
             </div>
 
             <div className="config-footer">
               <div className="config-recap"><span>Votre composition</span><p>{selectedProduct.name} · {palette.name} · {selectedDetails.length} finition{selectedDetails.length > 1 ? 's' : ''}{initials ? ` · ${initials}` : ''}</p></div>
-              <div className="config-actions">{activeStep > 0 && <button type="button" className="back-button" onClick={() => setActiveStep((step) => step - 1)}><ArrowIcon direction="left" /> Retour</button>}<button type="button" className="button button-accent" onClick={() => activeStep < 3 ? setActiveStep((step) => step + 1) : addConfiguredBag()}>{activeStep < 3 ? `Continuer · ${steps[activeStep + 1]}` : 'Ajouter au panier'} <ArrowIcon /></button></div>
-              <div className="config-pay"><span>Prix final : <strong>{total} €</strong></span><PaymentLogos /></div>
+              <div className="config-actions">{activeStep > 0 && <button type="button" className="back-button" onClick={() => setActiveStep((step) => step - 1)}><ArrowIcon direction="left" /> Retour</button>}<button type="button" className="button button-accent" onClick={(event) => activeStep < 3 ? setActiveStep((step) => step + 1) : addConfiguredBag(event.currentTarget)}>{activeStep < 3 ? `Continuer · ${steps[activeStep + 1]}` : 'Ajouter au panier'} <ArrowIcon /></button></div>
+              <div className="config-pay"><span>Prix final : <strong>{total} €</strong></span>{commerceReady ? <PaymentLogos /> : <small>Paiement Shopify activé à l’ouverture</small>}</div>
             </div>
           </div>
         </div>
@@ -460,7 +568,7 @@ export default function Home() {
 
       <section className="value-story section">
         <div className="value-image reveal"><Image src="/images/evening.webp" alt="Sac MAYLUNE chocolat et framboise porté le soir" fill sizes="(max-width: 800px) 100vw, 52vw" /><span>Du matin au soir</span></div>
-        <div className="value-copy reveal"><p className="eyebrow">Ce que vous achetez vraiment</p><h2>Une pièce qui donne une direction à votre tenue.</h2><p>Vous ne cherchez plus le sac qui ira « à peu près ». Vous partez de vos vêtements, de vos habitudes et des couleurs qui vous attirent déjà.</p><ol><li><span>01</span><div><h3>Il réveille vos basiques</h3><p>Un accord bien choisi suffit à transformer un jean, un trench ou une robe noire.</p></div></li><li><span>02</span><div><h3>Il ne ressemble pas à une série</h3><p>La forme est MAYLUNE. L’association, les détails et la plaque sont les vôtres.</p></div></li><li><span>03</span><div><h3>Il suit votre vraie journée</h3><p>Le format et les finitions partent de ce que vous emportez et de la façon dont vous le portez.</p></div></li></ol><a className="text-link" href="#personnaliser">Reprendre ma composition <ArrowIcon /></a></div>
+        <div className="value-copy reveal"><p className="eyebrow">Ce que vous achetez vraiment</p><h2>Une pièce qui donne une direction à votre tenue.</h2><p>Vous ne cherchez plus le sac qui ira « à peu près ». Vous partez de vos vêtements, de vos habitudes et des couleurs qui vous attirent déjà.</p><ol><li><span>01</span><div><h3>Il réveille vos basiques</h3><p>Un accord bien choisi suffit à transformer un jean, un trench ou une robe noire.</p></div></li><li><span>02</span><div><h3>Il ne ressemble pas à une série</h3><p>La forme est MAYLUNE. L’association, les détails et la plaque sont les vôtres.</p></div></li><li><span>03</span><div><h3>Il suit votre vraie journée</h3><p>Le format et les finitions partent de ce que vous emportez et de la façon dont vous le portez.</p></div></li></ol><a className="text-link" href="#config-start">Reprendre ma composition <ArrowIcon /></a></div>
       </section>
 
       <section className="craft" id="savoir-faire">
@@ -469,26 +577,21 @@ export default function Home() {
       </section>
 
       <section className="ritual section">
-        <div className="ritual-copy reveal"><p className="eyebrow">L’arrivée</p><h2>Le premier porté commence avant d’ouvrir la boîte.</h2><p>Votre sac arrive protégé dans son écrin, avec sa composition et ses conseils d’entretien. Pas un colis anonyme : le dernier chapitre de ce que vous avez choisi.</p><a className="button button-dark" href="#personnaliser">Composer le mien <ArrowIcon /></a></div>
+        <div className="ritual-copy reveal"><p className="eyebrow">L’arrivée</p><h2>Le premier porté commence avant d’ouvrir la boîte.</h2><p>Votre sac arrive protégé dans son écrin, avec sa composition et ses conseils d’entretien. Pas un colis anonyme : le dernier chapitre de ce que vous avez choisi.</p><a className="button button-dark" href="#config-start">Composer le mien <ArrowIcon /></a></div>
         <figure className="ritual-main reveal"><Image src="/images/unboxing.webp" alt="Ouverture de l’écrin bleu MAYLUNE" fill sizes="(max-width: 800px) 100vw, 48vw" /><figcaption>Écrin MAYLUNE · inclus</figcaption></figure>
         <figure className="ritual-detail reveal"><Image src="/images/rosalie.webp" alt="Détail du sac Rosalie framboise MAYLUNE" fill sizes="(max-width: 800px) 70vw, 24vw" /><figcaption>Votre accord · votre plaque</figcaption></figure>
       </section>
 
       <section className="faq section" id="faq">
-        <div className="faq-intro reveal"><p className="eyebrow">Avant de choisir</p><h2>Tout ce qu’il faut savoir, sans petites lignes.</h2><p>Une question sur une composition ? L’atelier répond à <a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a>.</p></div>
+        <div className="faq-intro reveal"><p className="eyebrow">Avant de choisir</p><h2>Tout ce qu’il faut savoir, sans petites lignes.</h2><p>Les coordonnées de l’atelier seront publiées avant l’ouverture des commandes.</p></div>
         <div className="faq-list reveal">{faqs.map((item, index) => <div className={`faq-item ${openFaq === index ? 'open' : ''}`} key={item.q}><button type="button" onClick={() => setOpenFaq(openFaq === index ? -1 : index)} aria-expanded={openFaq === index}><span>0{index + 1}</span><strong>{item.q}</strong><i>{openFaq === index ? '−' : '+'}</i></button><div><p>{item.a}</p></div></div>)}</div>
       </section>
 
-      <section className="newsletter">
-        <div><p className="eyebrow">Le carnet de couleurs</p><h2>Les prochaines palettes, avant tout le monde.</h2><p>Une à deux lettres par mois : nouveaux accords, éditions limitées et conseils pour les porter.</p></div>
-        <form onSubmit={(event) => { event.preventDefault(); showNotice('Bienvenue dans le carnet MAYLUNE'); }}><label htmlFor="email">Votre adresse e-mail</label><div><input id="email" type="email" placeholder="vous@exemple.fr" required /><button type="submit" aria-label="S’inscrire"><ArrowIcon /></button></div><small>10 € offerts sur votre première création. Désinscription en un clic.</small></form>
-      </section>
-
       <footer className="footer">
-        <div className="footer-top"><Brand light /><p>Des sacs crochetés à la commande.<br />Des compositions choisies par vous.</p><div className="socials"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Pinterest</a></div></div>
-        <div className="footer-links"><div><h3>Découvrir</h3><a href="#collection">Les silhouettes</a><a href="#personnaliser">Composer mon sac</a></div><div><h3>Comprendre</h3><a href="#savoir-faire">Le savoir-faire</a><a href="#faq">Livraison & retours</a><a href="#faq">Entretien</a></div><div><h3>Nous écrire</h3><a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a><a href="#">Suivre ma commande</a><a href="#">Instagram</a></div></div>
-        <div className="footer-payments"><div><span>Paiement sécurisé</span><small>Les moyens proposés s’affichent au paiement.</small></div><PaymentLogos light /></div>
-        <div className="footer-bottom"><span>© 2026 MAYLUNE</span><span>CGV · Confidentialité · Mentions légales</span><span>France · EUR €</span></div>
+        <div className="footer-top"><Brand light /><p>Des sacs crochetés à la commande.<br />Des compositions choisies par vous.</p><span className="footer-signature">Votre style · votre composition</span></div>
+        <div className="footer-links"><div><h3>Découvrir</h3><a href="#collection">Les silhouettes</a><a href="#config-start">Composer mon sac</a></div><div><h3>Comprendre</h3><a href="#savoir-faire">Le savoir-faire</a><a href="#faq">Livraison & retours</a><a href="#faq">Entretien</a></div><div><h3>Informations</h3><a href="./informations-legales/">Informations légales</a><a href="#faq">Délais et personnalisation</a></div></div>
+        <div className="footer-payments"><div><span>{commerceReady ? 'Paiement sécurisé' : 'Ouverture prochaine'}</span><small>{commerceReady ? 'Les moyens disponibles s’affichent au paiement Shopify.' : 'Le configurateur est disponible ; le paiement reste désactivé.'}</small></div>{commerceReady ? <PaymentLogos light /> : <span className="footer-commerce-status"><CheckIcon /> Connexion Shopify prête</span>}</div>
+        <div className="footer-bottom"><span>© 2026 MAYLUNE</span><a href="./informations-legales/">Conditions · Confidentialité · Mentions</a><span>France · EUR €</span></div>
       </footer>
     </main>
   );
