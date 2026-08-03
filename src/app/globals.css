@@ -244,9 +244,9 @@ svg {
   text-transform: uppercase;
   transition: background .25s, color .25s, border-color .25s, transform .25s var(--ease);
 }
-.button svg, .text-link svg, .bundle-copy button svg { width: 18px; transition: transform .25s var(--ease); }
+.button svg, .text-link svg { width: 18px; transition: transform .25s var(--ease); }
 .button:hover { transform: translateY(-2px); }
-.button:hover svg, .text-link:hover svg, .bundle-copy button:hover svg { transform: translateX(4px); }
+.button:hover svg, .text-link:hover svg { transform: translateX(4px); }
 .button-accent { background: var(--accent); color: white; }
 .button-accent:hover { background: var(--accent-dark); }
 .button-dark { background: var(--ink); color: white; }
@@ -332,7 +332,7 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
 .main-preview figcaption > div { display: flex; flex-direction: column; }
 .main-preview figcaption span { color: rgba(255,255,255,.62); font-size: 9px; font-weight: 680; letter-spacing: .14em; text-transform: uppercase; }
 .main-preview figcaption strong { font-family: var(--display); font-size: 21px; font-weight: 400; }
-.detail-preview { position: sticky; z-index: 3; top: 370px; width: 46%; min-height: 330px; margin: -440px 22px 44px auto; overflow: hidden; background: var(--surface); box-shadow: 0 22px 50px rgba(20, 12, 8, .3); animation: detail-in .42s var(--ease); }
+.detail-preview { position: sticky; z-index: 3; top: 370px; width: 46%; min-height: 330px; margin: -440px 22px 130px auto; overflow: hidden; background: var(--surface); box-shadow: 0 22px 50px rgba(20, 12, 8, .3); animation: detail-in .42s var(--ease); }
 .detail-preview > img { height: 190px !important; object-fit: cover; }
 .detail-preview figcaption { position: absolute; right: 0; bottom: 0; left: 0; min-height: 140px; padding: 17px; background: var(--surface); }
 .detail-preview figcaption span { color: var(--accent); font-size: 9px; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
@@ -343,21 +343,28 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
 @keyframes detail-in { from { opacity: 0; transform: translateY(10px); } }
 
 .config-panel { min-width: 0; padding: 34px clamp(28px, 3.5vw, 54px) 40px; }
-.config-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-.config-top > div { display: flex; flex-direction: column; }
-.config-top span { color: var(--ink-soft); font-size: 10px; font-weight: 680; letter-spacing: .13em; text-transform: uppercase; }
-.config-top > div strong { margin-top: 3px; font-family: var(--display); font-size: 24px; font-weight: 400; }
-.config-top > b { font-family: var(--display); font-size: 35px; font-weight: 400; }
-.stepper { display: grid; grid-template-columns: repeat(4, 1fr); margin: 27px 0 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.stepper button { position: relative; min-height: 61px; display: flex; align-items: center; gap: 9px; padding: 0 8px; background: transparent; border: 0; cursor: pointer; color: var(--ink-soft); text-align: left; }
-.stepper button + button { border-left: 1px solid var(--line); }
+.config-top { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 22px 24px 20px; background: var(--paper); border: 1px solid var(--line); }
+.config-top::before { position: absolute; top: 6px; right: 6px; bottom: 6px; left: 6px; border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); content: ''; pointer-events: none; }
+.config-top-main { display: flex; min-width: 0; flex-direction: column; }
+.config-top-main span { color: var(--gold); font-size: 10px; font-weight: 680; letter-spacing: .17em; text-transform: uppercase; }
+.config-top-main strong { margin-top: 5px; font-family: var(--display); font-size: 26px; font-weight: 400; letter-spacing: -.01em; }
+.config-top-main small { margin-top: 5px; overflow: hidden; color: var(--ink-soft); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.config-top-price { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.config-top-price b { font-family: var(--display); font-size: 37px; font-weight: 400; line-height: 1; }
+.config-top-price small { margin-top: 6px; color: var(--ink-soft); font-size: 10px; }
+.stepper { display: grid; grid-template-columns: repeat(4, 1fr); margin: 26px 0 34px; border-bottom: 1px solid var(--line); }
+.stepper button { position: relative; min-height: 64px; display: flex; align-items: center; gap: 10px; padding: 0 8px; background: transparent; border: 0; cursor: pointer; color: var(--ink-soft); text-align: left; transition: color .25s; }
 .stepper button::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--accent); content: ''; transform: scaleX(0); transition: transform .3s var(--ease); }
 .stepper button.active::after { transform: scaleX(1); }
-.stepper button > span { display: grid; width: 25px; height: 25px; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-size: 9px; }
+.stepper button.done::after { background: var(--gold); transform: scaleX(1); }
+.stepper button > span { display: grid; width: 27px; height: 27px; flex-shrink: 0; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-family: var(--display); font-size: 12px; transition: .25s; }
 .stepper button > span svg { width: 12px; }
 .stepper button b { font-size: 10px; font-weight: 680; letter-spacing: .08em; text-transform: uppercase; }
 .stepper button.active { color: var(--ink); }
-.stepper button.done > span { background: var(--ink); color: white; }
+.stepper button.active > span { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+.stepper button.done { color: var(--ink); }
+.stepper button.done > span { border-color: var(--gold); background: var(--gold); color: var(--surface); }
+.stepper button:hover:not(.active) { color: var(--ink); }
 .step-content { min-height: 380px; }
 .choice-step > header { max-width: 570px; margin-bottom: 25px; }
 .choice-step > header > span { color: var(--accent); font-size: 10px; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
@@ -443,25 +450,6 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
 .value-copy h3, .craft-copy h3 { margin: 0 0 4px; font-family: var(--display); font-size: 23px; font-weight: 400; }
 .value-copy li p, .craft-copy li p { margin: 0; color: var(--ink-soft); font-size: 11px; line-height: 1.65; }
 
-.bundles { background: var(--surface); }
-.bundle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.bundle-card { min-width: 0; border: 1px solid var(--line); }
-.bundle-media { position: relative; min-height: 385px; overflow: hidden; background: var(--surface-warm); }
-.bundle-image { position: absolute; width: 58%; height: 72%; overflow: hidden; box-shadow: 0 20px 45px rgba(35,20,14,.18); transition: transform .55s var(--ease); }
-.bundle-image img { object-fit: cover; }
-.bundle-image.image-1 { z-index: 2; top: 9%; left: 6%; transform: rotate(-5deg); }
-.bundle-image.image-2 { right: 5%; bottom: 7%; transform: rotate(6deg); }
-.bundle-card:hover .image-1 { transform: rotate(-7deg) translate(-4px,-4px); }
-.bundle-card:hover .image-2 { transform: rotate(8deg) translate(4px,-4px); }
-.bundle-media > span { position: absolute; z-index: 4; top: 14px; right: 14px; padding: 8px 10px; background: var(--wine); color: white; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.bundle-copy { padding: 25px; }
-.bundle-copy > span { color: var(--accent); font-size: 9px; font-weight: 720; letter-spacing: .13em; text-transform: uppercase; }
-.bundle-copy h3 { margin: 5px 0 6px; font-family: var(--display); font-size: 30px; font-weight: 400; }
-.bundle-copy > p { min-height: 42px; margin: 0 0 18px; color: var(--ink-soft); font-size: 11px; line-height: 1.6; }
-.bundle-copy > div { display: flex; align-items: baseline; gap: 10px; }
-.bundle-copy > div strong { font-family: var(--display); font-size: 27px; font-weight: 400; }
-.bundle-copy del { color: var(--ink-soft); font-size: 11px; }
-.bundle-copy button { width: 100%; display: flex; min-height: 49px; align-items: center; justify-content: space-between; margin-top: 19px; padding: 0 15px; background: var(--ink); border: 0; color: white; cursor: pointer; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 
 .craft { display: grid; grid-template-columns: 1fr 1fr; background: var(--ink); color: white; }
 .craft-image { position: relative; min-height: 850px; overflow: hidden; }
@@ -571,10 +559,6 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
   .step-content { min-height: auto; }
   .value-story { grid-template-columns: 1fr; }
   .value-image { min-height: 90vw; }
-  .bundle-grid { grid-template-columns: 1fr; gap: 25px; }
-  .bundle-card { display: grid; grid-template-columns: .9fr 1.1fr; }
-  .bundle-media { min-height: 390px; }
-  .bundle-copy { display: flex; justify-content: center; flex-direction: column; }
   .craft { grid-template-columns: 1fr; }
   .craft-image { min-height: 95vw; }
   .craft-copy { padding: 80px 30px; }
@@ -618,8 +602,10 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
   .campaign-band p:not(.eyebrow) { font-size: 13px; }
   .campaign-band .button { width: 100%; }
   .config-panel { padding: 26px 14px 32px; }
-  .config-top > div strong { font-size: 20px; }
-  .config-top > b { font-size: 28px; }
+  .config-top { padding: 16px 15px 15px; }
+  .config-top-main strong { font-size: 20px; }
+  .config-top-price b { font-size: 28px; }
+  .config-top-price small { max-width: 110px; }
   .stepper { margin-bottom: 27px; }
   .stepper button { min-height: 56px; justify-content: center; padding: 0 3px; }
   .stepper button b { display: none; }
@@ -643,9 +629,6 @@ h1 em, h2 em { color: var(--accent); font-weight: 400; }
   .payment-logos img { max-width: 45px; height: 17px; }
   .value-story { gap: 48px; }
   .value-image { min-height: 125vw; }
-  .bundle-grid { display: flex; overflow-x: auto; gap: 12px; margin-right: -17px; padding-right: 17px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .bundle-card { min-width: 86vw; display: block; scroll-snap-align: start; }
-  .bundle-media { min-height: 90vw; }
   .craft-image { min-height: 125vw; }
   .craft-copy { padding: 76px 18px; }
   .craft-fact { align-items: flex-start; flex-direction: column; }

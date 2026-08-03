@@ -16,8 +16,12 @@ test('le catalogue propose quatre signatures', () => {
   }
 });
 
-test('les bundles et paiements sont intégrés', () => {
-  for (const term of ['Le Duo Couleur', 'Le Weekender', 'Le Duo Sœurs', 'Visa', 'Mastercard', 'Apple Pay', 'Klarna']) {
+test('les paiements sont intégrés et les duos retirés', () => {
+  for (const term of ['Visa', 'Mastercard', 'Apple Pay', 'Klarna']) {
     assert.ok(page.includes(term), `élément commercial manquant : ${term}`);
+  }
+  // duos retirés sur décision du 03/08/2026 — ne doivent pas réapparaître sans ordre
+  for (const term of ['Le Duo Couleur', 'Le Weekender', 'Le Duo Sœurs']) {
+    assert.ok(!page.includes(term), `duo présent alors que retiré : ${term}`);
   }
 });

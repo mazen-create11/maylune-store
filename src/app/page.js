@@ -8,7 +8,7 @@ const products = [
     id: 'rosalie',
     name: 'Rosalie',
     type: 'Mini bandoulière',
-    price: 69,
+    price: 59,
     image: '/images/rosalie.png',
     alt: 'Sac Rosalie MAYLUNE framboise et bordeaux avec chaîne dorée',
     badge: 'Bestseller',
@@ -19,7 +19,7 @@ const products = [
     id: 'capri',
     name: 'Capri',
     type: 'Sac épaule souple',
-    price: 79,
+    price: 74,
     image: '/images/capri.png',
     alt: 'Sac Capri MAYLUNE bleu cobalt crocheté à la main',
     badge: 'Signature',
@@ -30,7 +30,7 @@ const products = [
     id: 'colette',
     name: 'Colette',
     type: 'Cabas quotidien',
-    price: 119,
+    price: 109,
     image: '/images/colette.png',
     alt: 'Cabas Colette MAYLUNE jaune beurre et écru',
     badge: 'Grande capacité',
@@ -41,7 +41,7 @@ const products = [
     id: 'mini-muse',
     name: 'Mini Muse',
     type: 'Mini sac épaule',
-    price: 59,
+    price: 55,
     image: '/images/hero-maylune.png',
     alt: 'Mini Muse MAYLUNE rouge tomate et vanille porté au soleil',
     badge: 'Petit format',
@@ -109,39 +109,9 @@ const finishes = [
     name: 'Poche zippée',
     short: 'Doublée à l’intérieur',
     benefit: 'Garde les clés, les cartes et les écouteurs faciles à retrouver.',
-    price: 12,
+    price: 10,
     image: '/images/detail-pocket.png',
     position: 'center',
-  },
-];
-
-const bundles = [
-  {
-    id: 'duo-couleur',
-    name: 'Le Duo Couleur',
-    description: 'Un Capri quotidien et une Rosalie du soir.',
-    note: 'Deux formats · deux palettes',
-    price: 125,
-    compareAt: 148,
-    images: ['/images/capri.png', '/images/rosalie.png'],
-  },
-  {
-    id: 'weekender',
-    name: 'Le Weekender',
-    description: 'Le grand Colette et le Mini Muse pour partir légère.',
-    note: 'Semaine · week-end',
-    price: 149,
-    compareAt: 178,
-    images: ['/images/colette.png', '/images/hero-maylune.png'],
-  },
-  {
-    id: 'duo-soeurs',
-    name: 'Le Duo Sœurs',
-    description: 'Deux minis à composer séparément, pour offrir ou partager.',
-    note: 'Deux compositions possibles',
-    price: 109,
-    compareAt: 128,
-    images: ['/images/rosalie.png', '/images/hero-maylune.png'],
   },
 ];
 
@@ -302,7 +272,7 @@ export default function Home() {
 
   function addConfiguredBag() {
     addToCart({
-      id: `${selectedProduct.id}-${Date.now()}`,
+      id: `${selectedProduct.id}-${crypto.randomUUID()}`,
       name: `${selectedProduct.name} personnalisé`,
       price: total,
       image: selectedProduct.image,
@@ -354,7 +324,7 @@ export default function Home() {
       <a className="skip-link" href="#content">Aller au contenu</a>
 
       <div className="announcement">
-        <span>Livraison offerte dès 95 €</span><i />
+        <span>Livraison offerte dès 79 €</span><i />
         <span>Confection à la commande · 7 à 12 jours</span>
       </div>
 
@@ -369,7 +339,7 @@ export default function Home() {
 
       <aside className={`drawer menu-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
         <div className="drawer-head"><Brand /><button type="button" className="icon-button" onClick={() => setMenuOpen(false)} aria-label="Fermer le menu"><CloseIcon /></button></div>
-        <nav>{['Les silhouettes', 'Composer mon sac', 'Le savoir-faire', 'Les duos', 'FAQ'].map((item, index) => <a key={item} href={['#collection', '#personnaliser', '#savoir-faire', '#bundles', '#faq'][index]} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{item}<ArrowIcon /></a>)}</nav>
+        <nav>{['Les silhouettes', 'Composer mon sac', 'Le savoir-faire', 'FAQ'].map((item, index) => <a key={item} href={['#collection', '#personnaliser', '#savoir-faire', '#faq'][index]} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{item}<ArrowIcon /></a>)}</nav>
         <p>Une question ? <a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a></p>
       </aside>
 
@@ -389,7 +359,7 @@ export default function Home() {
           <h1>Le sac que personne n’aura choisi <em>à votre place.</em></h1>
           <p className="hero-lead">Choisissez une silhouette, mariez deux couleurs et ajoutez les détails qui vous servent vraiment. Nous crochetons votre composition à la commande.</p>
           <div className="hero-actions"><a className="button button-accent" href="#personnaliser">Créer ma signature <ArrowIcon /></a><a className="text-link" href="#collection">Voir les quatre formes</a></div>
-          <ul className="hero-facts"><li><b>Dès 59 €</b><span>prix mis à jour en direct</span></li><li><b>7–12 jours</b><span>de confection estimée</span></li><li><b>4 décisions</b><span>guidées pas à pas</span></li></ul>
+          <ul className="hero-facts"><li><b>Dès 55 €</b><span>prix mis à jour en direct</span></li><li><b>7–12 jours</b><span>de confection estimée</span></li><li><b>4 décisions</b><span>guidées pas à pas</span></li></ul>
         </div>
         <figure className="hero-visual">
           <Image src="/images/hero-maylune.png" alt="Mini sac MAYLUNE rouge tomate et vanille porté avec une tenue en lin" fill priority sizes="(max-width: 800px) 100vw, 55vw" />
@@ -428,7 +398,10 @@ export default function Home() {
           </div>
 
           <div className="config-panel">
-            <div className="config-top"><div><span>Votre composition</span><strong>{selectedProduct.name} · {palette.name}</strong></div><b>{total} €</b></div>
+            <div className="config-top">
+              <div className="config-top-main"><span>Votre composition</span><strong>{selectedProduct.name} · {palette.name}</strong><small>{selectedDetails.join(' · ')}{initials ? ` · Initiales ${initials}` : ''}</small></div>
+              <div className="config-top-price"><b>{total} €</b>{total > selectedProduct.price && <small>{selectedProduct.name} {selectedProduct.price} € + options {total - selectedProduct.price} €</small>}</div>
+            </div>
             <nav className="stepper" aria-label="Étapes de personnalisation">{steps.map((step, index) => <button type="button" key={step} className={`${index === activeStep ? 'active' : ''} ${index < activeStep ? 'done' : ''}`} onClick={() => setActiveStep(index)}><span>{index < activeStep ? <CheckIcon /> : `0${index + 1}`}</span><b>{step}</b></button>)}</nav>
 
             <div className="step-content">
@@ -455,11 +428,6 @@ export default function Home() {
         <div className="value-copy reveal"><p className="eyebrow">Ce que vous achetez vraiment</p><h2>Une pièce qui donne une direction à votre tenue.</h2><p>Vous ne cherchez plus le sac qui ira « à peu près ». Vous partez de vos vêtements, de vos habitudes et des couleurs qui vous attirent déjà.</p><ol><li><span>01</span><div><h3>Il réveille vos basiques</h3><p>Un accord bien choisi suffit à transformer un jean, un trench ou une robe noire.</p></div></li><li><span>02</span><div><h3>Il ne ressemble pas à une série</h3><p>La forme est MAYLUNE. L’association, les détails et la plaque sont les vôtres.</p></div></li><li><span>03</span><div><h3>Il suit votre vraie journée</h3><p>Le format et les finitions partent de ce que vous emportez et de la façon dont vous le portez.</p></div></li></ol><a className="text-link" href="#personnaliser">Reprendre ma composition <ArrowIcon /></a></div>
       </section>
 
-      <section className="bundles section" id="bundles">
-        <div className="section-heading reveal"><div><p className="eyebrow">03 · Les duos</p><h2>Deux formats. Une même façon de <em>vous habiller.</em></h2></div><p>Un sac pour le quotidien, un autre pour sortir ou voyager léger. Chaque duo évite de choisir entre vos deux rythmes.</p></div>
-        <div className="bundle-grid">{bundles.map((bundle, index) => <article className="bundle-card reveal" key={bundle.id}><div className="bundle-media">{bundle.images.map((src, imageIndex) => <div className={`bundle-image image-${imageIndex + 1}`} key={src}><Image src={src} alt="" fill sizes="(max-width: 800px) 55vw, 22vw" /></div>)}<span>Économisez {bundle.compareAt - bundle.price} €</span></div><div className="bundle-copy"><span>0{index + 1} · {bundle.note}</span><h3>{bundle.name}</h3><p>{bundle.description}</p><div><strong>{bundle.price} €</strong><del>{bundle.compareAt} €</del></div><button type="button" onClick={() => addToCart({ id: bundle.id, name: bundle.name, price: bundle.price, image: bundle.images[0], details: bundle.description })}>Choisir ce duo <ArrowIcon /></button></div></article>)}</div>
-      </section>
-
       <section className="craft" id="savoir-faire">
         <div className="craft-image reveal"><Image src="/images/atelier.png" alt="Artisane crochetant un sac MAYLUNE bleu" fill sizes="(max-width: 800px) 100vw, 50vw" /><div><span>Le geste MAYLUNE</span><strong>Maille après maille</strong></div></div>
         <div className="craft-copy reveal"><p className="eyebrow">Fait à la commande</p><h2>Votre composition lance le geste.</h2><p className="craft-lead">La fabrication ne commence qu’après vos choix. La forme, les fils et les finitions sont préparés pour une seule pièce : la vôtre.</p><ol><li><span>01</span><div><h3>La composition est vérifiée</h3><p>Forme, accord de couleurs et options sont réunis sur une fiche d’atelier.</p></div></li><li><span>02</span><div><h3>Le sac prend forme</h3><p>Le corps, les anses et la doublure sont assemblés puis contrôlés.</p></div></li><li><span>03</span><div><h3>Les finitions sont posées</h3><p>Plaque, chaîne et poche sont vérifiées avant la mise en écrin.</p></div></li></ol><div className="craft-fact"><strong>7–12 jours</strong><span>Estimation de confection avant expédition</span></div></div>
@@ -483,7 +451,7 @@ export default function Home() {
 
       <footer className="footer">
         <div className="footer-top"><Brand light /><p>Des sacs crochetés à la commande.<br />Des compositions choisies par vous.</p><div className="socials"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Pinterest</a></div></div>
-        <div className="footer-links"><div><h3>Découvrir</h3><a href="#collection">Les silhouettes</a><a href="#personnaliser">Composer mon sac</a><a href="#bundles">Les duos</a></div><div><h3>Comprendre</h3><a href="#savoir-faire">Le savoir-faire</a><a href="#faq">Livraison & retours</a><a href="#faq">Entretien</a></div><div><h3>Nous écrire</h3><a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a><a href="#">Suivre ma commande</a><a href="#">Instagram</a></div></div>
+        <div className="footer-links"><div><h3>Découvrir</h3><a href="#collection">Les silhouettes</a><a href="#personnaliser">Composer mon sac</a></div><div><h3>Comprendre</h3><a href="#savoir-faire">Le savoir-faire</a><a href="#faq">Livraison & retours</a><a href="#faq">Entretien</a></div><div><h3>Nous écrire</h3><a href="mailto:bonjour@maylune.fr">bonjour@maylune.fr</a><a href="#">Suivre ma commande</a><a href="#">Instagram</a></div></div>
         <div className="footer-payments"><div><span>Paiement sécurisé</span><small>Les moyens proposés s’affichent au paiement.</small></div><PaymentLogos light /></div>
         <div className="footer-bottom"><span>© 2026 MAYLUNE</span><span>CGV · Confidentialité · Mentions légales</span><span>France · EUR €</span></div>
       </footer>
