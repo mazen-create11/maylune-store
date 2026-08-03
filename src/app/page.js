@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const products = [
   {
@@ -9,111 +9,139 @@ const products = [
     name: 'Rosalie',
     type: 'Mini bandoulière',
     price: 59,
-    image: '/images/rosalie.png',
+    image: '/images/rosalie.webp',
     alt: 'Sac Rosalie MAYLUNE framboise et bordeaux avec chaîne dorée',
     badge: 'Bestseller',
     usage: 'Pour sortir légère',
     capacity: 'Téléphone · cartes · rouge à lèvres',
+    plaquePosition: { left: '57%', top: '58%' },
+    previewPosition: 'center',
   },
   {
     id: 'capri',
     name: 'Capri',
     type: 'Sac épaule souple',
     price: 74,
-    image: '/images/capri.png',
+    image: '/images/capri.webp',
     alt: 'Sac Capri MAYLUNE bleu cobalt crocheté à la main',
     badge: 'Signature',
     usage: 'Pour tous les jours',
     capacity: 'Portefeuille · clés · lunettes · carnet',
+    plaquePosition: { left: '56%', top: '80%' },
+    previewPosition: 'center',
   },
   {
     id: 'colette',
     name: 'Colette',
     type: 'Cabas quotidien',
     price: 109,
-    image: '/images/colette.png',
+    image: '/images/colette.webp',
     alt: 'Cabas Colette MAYLUNE jaune beurre et écru',
     badge: 'Grande capacité',
     usage: 'Pour les journées pleines',
     capacity: 'Tablette · trousse · bouteille',
+    plaquePosition: { left: '50%', top: '52%' },
+    previewPosition: 'center',
   },
   {
     id: 'mini-muse',
     name: 'Mini Muse',
     type: 'Mini sac épaule',
     price: 55,
-    image: '/images/hero-maylune.png',
+    image: '/images/hero-maylune.webp',
     alt: 'Mini Muse MAYLUNE rouge tomate et vanille porté au soleil',
     badge: 'Petit format',
     usage: 'Pour le soir',
     capacity: 'Téléphone · cartes · écouteurs',
+    plaquePosition: { left: '68%', top: '65%' },
+    previewPosition: '69% center',
   },
 ];
 
 const palettes = [
   {
+    id: 'dolce-vita',
     name: 'Dolce Vita',
     colors: ['#df4b36', '#e9c46b'],
     label: 'Tomate & vanille',
-    image: '/images/palette-dolce-vita.png',
     mood: 'Solaire',
     benefit: 'Réchauffe le blanc, le denim et le camel.',
   },
   {
+    id: 'french-kiss',
     name: 'French Kiss',
     colors: ['#d72e69', '#6d1729'],
     label: 'Framboise & bordeaux',
-    image: '/images/palette-french-kiss.png',
     mood: 'Intense',
     benefit: 'Relève le noir, le gris et le jean brut.',
   },
   {
+    id: 'riviera',
     name: 'Riviera',
     colors: ['#1948c8', '#eee7dc'],
     label: 'Cobalt & écru',
-    image: '/images/capri.png',
     mood: 'Franc',
     benefit: 'Éclaire les neutres, le marine et les rayures.',
   },
   {
+    id: 'pistache',
     name: 'Pistache',
     colors: ['#b7c692', '#e4b8c3'],
     label: 'Pistache & rose poudré',
-    image: '/images/palette-pistache.png',
     mood: 'Doux',
     benefit: 'Adoucit l’écru, le beige et le chocolat.',
   },
 ];
 
-const finishes = [
-  {
-    id: 'braid',
-    name: 'Anse crochetée',
-    short: 'Souple et ton sur ton',
-    benefit: 'Un porté confortable, réalisé dans les mêmes fils que votre sac.',
-    price: 0,
-    image: '/images/capri.png',
-    position: '50% 13%',
+const paletteVisuals = {
+  rosalie: {
+    'dolce-vita': '/images/configurator/rosalie-dolce-vita.webp',
+    'french-kiss': '/images/configurator/rosalie-french-kiss.webp',
+    riviera: '/images/configurator/rosalie-riviera.webp',
+    pistache: '/images/configurator/rosalie-pistache.webp',
   },
-  {
-    id: 'chain',
-    name: 'Chaîne dorée',
-    short: 'Amovible, plus habillée',
-    benefit: 'Transforme le sac de journée en sac du soir, sans changer de modèle.',
-    price: 8,
-    image: '/images/rosalie.png',
-    position: '50% 72%',
+  capri: {
+    'dolce-vita': '/images/palette-dolce-vita.webp',
+    'french-kiss': '/images/palette-french-kiss.webp',
+    riviera: '/images/capri.webp',
+    pistache: '/images/palette-pistache.webp',
   },
-  {
-    id: 'pocket',
-    name: 'Poche zippée',
-    short: 'Doublée à l’intérieur',
-    benefit: 'Garde les clés, les cartes et les écouteurs faciles à retrouver.',
-    price: 10,
-    image: '/images/detail-pocket.png',
-    position: 'center',
+  colette: {
+    'dolce-vita': '/images/configurator/colette-dolce-vita.webp',
+    'french-kiss': '/images/configurator/colette-french-kiss.webp',
+    riviera: '/images/configurator/colette-riviera.webp',
+    pistache: '/images/configurator/colette-pistache.webp',
   },
-];
+  'mini-muse': {
+    'dolce-vita': '/images/hero-maylune.webp',
+    'french-kiss': '/images/configurator/mini-muse-french-kiss.webp',
+    riviera: '/images/configurator/mini-muse-riviera.webp',
+    pistache: '/images/configurator/mini-muse-pistache.webp',
+  },
+};
+
+const finishSets = {
+  rosalie: [
+    { id: 'braid', name: 'Anse courte tressée', short: 'Équilibre la petite forme', benefit: 'Une prise en main nette, pensée aux proportions de Rosalie.', price: 0 },
+    { id: 'chain', name: 'Chaîne bijou', short: 'Porté épaule ou croisé', benefit: 'Ajoute un porté mains libres sans alourdir sa ligne compacte.', price: 8, image: '/images/rosalie.webp', position: 'center' },
+    { id: 'pocket', name: 'Poche secrète', short: 'Cartes et rouge à lèvres', benefit: 'Un compartiment zippé dimensionné pour les petits essentiels.', price: 10, image: '/images/configurator/rosalie-pocket.webp', position: 'center' },
+  ],
+  capri: [
+    { id: 'braid', name: 'Anse tressée', short: 'Souple et ton sur ton', benefit: 'Le tombé naturel qui fait la signature de la forme Capri.', price: 0 },
+    { id: 'chain', name: 'Chaîne amovible', short: 'Deux portés en un', benefit: 'Passe de l’épaule au porté croisé avec deux mousquetons discrets.', price: 8, image: '/images/configurator/capri-chain.webp', position: 'center' },
+    { id: 'pocket', name: 'Poche zippée', short: 'Doublée à l’intérieur', benefit: 'Garde les clés, les cartes et les écouteurs faciles à retrouver.', price: 10, image: '/images/configurator/capri-pocket.webp', position: 'center' },
+  ],
+  colette: [
+    { id: 'braid', name: 'Doubles anses', short: 'Confort sur l’épaule', benefit: 'Une longueur étudiée pour porter Colette même lorsqu’elle est remplie.', price: 0 },
+    { id: 'chain', name: 'Attache-clés dorée', short: 'Toujours à portée de main', benefit: 'Un mousqueton intérieur dédié pour ne plus chercher vos clés au fond du cabas.', price: 8, image: '/images/configurator/colette-key-leash.webp', position: 'center' },
+    { id: 'pocket', name: 'Grande poche zippée', short: 'Format portefeuille', benefit: 'Une poche doublée, proportionnée au volume généreux de Colette.', price: 10, image: '/images/configurator/colette-pocket.webp', position: 'center' },
+  ],
+  'mini-muse': [
+    { id: 'braid', name: 'Bandoulière tressée', short: 'Légère et souple', benefit: 'Un porté épaule confortable, ajusté à la petite taille de Mini Muse.', price: 0 },
+    { id: 'chain', name: 'Chaîne du soir', short: 'Plus habillée', benefit: 'Remplace la bandoulière crochetée pour donner une allure plus précieuse.', price: 8, image: '/images/configurator/mini-muse-chain.webp', position: 'center' },
+    { id: 'pocket', name: 'Poche cartes', short: 'Fine et sécurisée', benefit: 'Un rangement compact pensé pour les cartes et le rouge à lèvres.', price: 10, image: '/images/configurator/mini-muse-pocket.webp', position: 'center' },
+  ],
+};
 
 const faqs = [
   {
@@ -122,7 +150,7 @@ const faqs = [
   },
   {
     q: 'Comment être sûre de mon association de couleurs ?',
-    a: 'Le configurateur vous donne une direction visuelle. Avant de commencer une composition personnalisée, l’atelier peut confirmer l’accord avec une photo des fils côte à côte.',
+    a: 'Chaque palette est montrée directement sur la silhouette que vous avez choisie, jamais sur un modèle témoin. Avant la confection, l’atelier peut aussi confirmer l’accord avec une photo des fils côte à côte.',
   },
   {
     q: 'Que puis-je réellement personnaliser ?',
@@ -230,7 +258,7 @@ export default function Home() {
     type: 'Silhouette',
     title: products[1].name,
     copy: products[1].capacity,
-    image: products[1].image,
+    image: paletteVisuals.capri.riviera,
     position: 'center',
   });
 
@@ -248,16 +276,13 @@ export default function Home() {
     return () => document.body.classList.remove('locked');
   }, [menuOpen, cartOpen]);
 
-  const total = useMemo(() => {
-    const options = finishes
-      .filter((finish) => selectedFinishes.includes(finish.id))
-      .reduce((sum, finish) => sum + finish.price, 0);
-    return selectedProduct.price + options + (initials ? 8 : 0);
-  }, [initials, selectedFinishes, selectedProduct]);
-
-  const selectedDetails = finishes.filter((finish) => selectedFinishes.includes(finish.id)).map((finish) => finish.name);
+  const availableFinishes = finishSets[selectedProduct.id];
+  const paletteImage = paletteVisuals[selectedProduct.id][palette.id];
+  const optionTotal = availableFinishes.filter((finish) => selectedFinishes.includes(finish.id)).reduce((sum, finish) => sum + finish.price, 0);
+  const total = selectedProduct.price + optionTotal + (initials ? 8 : 0);
+  const selectedDetails = availableFinishes.filter((finish) => selectedFinishes.includes(finish.id)).map((finish) => finish.name);
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const configuredPreviewImage = selectedProduct.id === 'capri' ? palette.image : selectedProduct.image;
+  const configuredPreviewImage = activeStep === 2 && focus.type === 'Détail' ? focus.image : paletteImage;
 
   function showNotice(message) {
     setNotice(message);
@@ -275,14 +300,16 @@ export default function Home() {
       id: `${selectedProduct.id}-${crypto.randomUUID()}`,
       name: `${selectedProduct.name} personnalisé`,
       price: total,
-      image: selectedProduct.image,
+      image: paletteImage,
       details: `${palette.name} · ${selectedDetails.join(', ')}${initials ? ` · ${initials}` : ''}`,
     });
   }
 
   function selectProduct(product, scroll = false) {
     setSelectedProduct(product);
-    setFocus({ type: 'Silhouette', title: product.name, copy: `${product.usage} · ${product.capacity}`, image: product.image, position: 'center' });
+    setSelectedFinishes(['braid']);
+    setInitials('');
+    setFocus({ type: 'Silhouette', title: product.name, copy: `${product.usage} · ${product.capacity}`, image: paletteVisuals[product.id][palette.id], position: 'center' });
     if (scroll) {
       setActiveStep(0);
       window.setTimeout(() => document.querySelector('#personnaliser')?.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -291,13 +318,20 @@ export default function Home() {
 
   function selectPalette(option) {
     setPalette(option);
-    setFocus({ type: 'Palette', title: option.name, copy: option.benefit, image: option.image, position: 'center' });
+    setFocus({ type: 'Palette', title: `${selectedProduct.name} · ${option.name}`, copy: option.benefit, image: paletteVisuals[selectedProduct.id][option.id], position: 'center' });
   }
 
   function toggleFinish(finish) {
-    setFocus({ type: 'Détail', title: finish.name, copy: finish.benefit, image: finish.image, position: finish.position });
-    if (finish.id === 'braid') return;
-    setSelectedFinishes((current) => current.includes(finish.id) ? current.filter((id) => id !== finish.id) : [...current, finish.id]);
+    const finishImage = finish.image || paletteImage;
+    if (finish.id === 'braid') {
+      setFocus({ type: 'Détail', title: finish.name, copy: finish.benefit, image: finishImage, position: finish.position || 'center' });
+      return;
+    }
+    const selected = selectedFinishes.includes(finish.id);
+    setSelectedFinishes((current) => selected ? current.filter((id) => id !== finish.id) : [...current, finish.id]);
+    setFocus(selected
+      ? { type: 'Composition', title: `${selectedProduct.name} sans ${finish.name.toLowerCase()}`, copy: 'Option retirée de votre composition.', image: paletteImage, position: 'center' }
+      : { type: 'Détail', title: finish.name, copy: finish.benefit, image: finishImage, position: finish.position || 'center' });
   }
 
   function updateInitials(value) {
@@ -305,10 +339,10 @@ export default function Home() {
     setInitials(cleanValue);
     setFocus({
       type: 'Gravure',
-      title: cleanValue || 'Vos initiales',
-      copy: cleanValue ? `${cleanValue} sera gravé sur la plaque dorée.` : 'Jusqu’à trois lettres sur votre plaque dorée.',
-      image: '/images/rosalie.png',
-      position: '54% 64%',
+      title: cleanValue ? `${selectedProduct.name} · ${cleanValue}` : `Plaque ${selectedProduct.name}`,
+      copy: cleanValue ? `${cleanValue} sera gravé sur la plaque dorée de votre ${selectedProduct.name}.` : 'Jusqu’à trois lettres sur votre plaque dorée.',
+      image: paletteImage,
+      position: 'center',
     });
   }
 
@@ -362,13 +396,13 @@ export default function Home() {
           <ul className="hero-facts"><li><b>Dès 55 €</b><span>prix mis à jour en direct</span></li><li><b>7–12 jours</b><span>de confection estimée</span></li><li><b>4 décisions</b><span>guidées pas à pas</span></li></ul>
         </div>
         <figure className="hero-visual">
-          <Image src="/images/hero-maylune.png" alt="Mini sac MAYLUNE rouge tomate et vanille porté avec une tenue en lin" fill priority sizes="(max-width: 800px) 100vw, 55vw" />
+          <Image src="/images/hero-maylune.webp" alt="Mini sac MAYLUNE rouge tomate et vanille porté avec une tenue en lin" fill priority sizes="(max-width: 800px) 100vw, 55vw" />
           <figcaption><span>Mini Muse</span><strong>Dolce Vita</strong></figcaption>
           <div className="hero-seal"><span>M</span><small>Composé<br />pour vous</small></div>
         </figure>
       </section>
 
-      <section className="proof-rail" aria-label="Les engagements MAYLUNE"><div><span>01</span><p><b>Votre accord de couleurs</b> visible avant la confection</p></div><div><span>02</span><p><b>Votre prix</b> calculé sans surprise</p></div><div><span>03</span><p><b>Votre pièce</b> créée à la commande</p></div></section>
+      <section className="proof-rail" aria-label="Les engagements MAYLUNE"><div><span>01</span><p><b>Chaque palette</b> montrée sur la forme choisie</p></div><div><span>02</span><p><b>Chaque détail</b> adapté aux proportions du modèle</p></div><div><span>03</span><p><b>Votre prix</b> calculé sans surprise</p></div></section>
 
       <section className="collection section" id="collection">
         <div className="section-heading reveal"><div><p className="eyebrow">01 · Trouver le bon format</p><h2>Commencez par ce que votre sac doit faire <em>pour vous.</em></h2></div><p>Un mini pour sortir, une forme souple au quotidien ou un cabas qui suit toute la journée. Le style vient ensuite.</p></div>
@@ -376,25 +410,26 @@ export default function Home() {
       </section>
 
       <section className="campaign-band reveal">
-        <Image src="/images/campaign.png" alt="Trois femmes portant des sacs MAYLUNE colorés au bord de la Méditerranée" fill sizes="100vw" />
+        <Image src="/images/campaign.webp" alt="Trois femmes portant des sacs MAYLUNE colorés au bord de la Méditerranée" fill sizes="100vw" />
         <div className="campaign-overlay"><p className="eyebrow">Une couleur suffit parfois</p><h2>Le détail qui change toute la tenue.</h2><p>Sur un jean, un ensemble neutre ou une robe noire : votre composition devient le point d’attention, pas un accessoire de plus.</p><a className="button button-light" href="#personnaliser">Trouver mon accord <ArrowIcon /></a></div>
       </section>
 
       <section className="configurator section" id="personnaliser">
-        <div className="config-intro reveal"><div><p className="eyebrow">02 · L’atelier de composition</p><h2>Votre sac. Quatre décisions. <em>Zéro hasard.</em></h2></div><p>Chaque choix est montré, expliqué et ajouté au prix en direct. Vous savez ce que vous choisissez et pourquoi.</p></div>
+        <div className="config-intro reveal"><div><p className="eyebrow">02 · L’atelier de composition</p><h2>Votre sac. Quatre décisions. <em>Zéro hasard.</em></h2></div><p>La silhouette choisie reste la même du premier clic jusqu’au panier. Couleurs, détails et plaque suivent votre modèle, avec le prix final en direct.</p></div>
 
         <div className="config-shell reveal">
           <div className="config-visual">
             <figure className="main-preview">
-              <Image src={configuredPreviewImage} alt={`Composition ${selectedProduct.name}, palette ${palette.name}`} fill sizes="(max-width: 900px) 100vw, 48vw" />
+              <Image key={configuredPreviewImage} src={configuredPreviewImage} alt={`Composition ${selectedProduct.name}, palette ${palette.name}`} fill sizes="(max-width: 900px) 100vw, 48vw" style={{ objectPosition: activeStep === 2 && focus.type === 'Détail' ? focus.position : selectedProduct.previewPosition }} />
+              {activeStep === 3 && initials && <span className="preview-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials}</span>}
               <div className="palette-edge" style={{ '--c1': palette.colors[0], '--c2': palette.colors[1] }} />
               <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>Votre accord</span><strong>{palette.name}</strong></div></figcaption>
             </figure>
-            <figure className="detail-preview" key={`${focus.type}-${focus.title}`}>
+            <figure className="detail-preview" key={`${selectedProduct.id}-${focus.type}-${focus.title}`}>
               <Image src={focus.image} alt={`Aperçu ${focus.title}`} fill sizes="(max-width: 900px) 86vw, 20vw" style={{ objectPosition: focus.position }} />
               <figcaption><span>{focus.type}</span><strong>{focus.title}</strong><p>{focus.copy}</p></figcaption>
             </figure>
-            <p className="preview-note"><CheckIcon /> Aperçu d’inspiration · validation des fils avant confection</p>
+            <p className="preview-note"><CheckIcon /> Simulation sur votre {selectedProduct.name} · fils validés avant confection</p>
           </div>
 
           <div className="config-panel">
@@ -407,11 +442,11 @@ export default function Home() {
             <div className="step-content">
               {activeStep === 0 && <section className="choice-step"><header><span>Étape 1 sur 4</span><h3>Quel rythme aura votre sac ?</h3><p>Choisissez selon ce que vous emportez, pas seulement selon la photo.</p></header><div className="shape-options">{products.map((product) => <button type="button" key={product.id} className={selectedProduct.id === product.id ? 'selected' : ''} onClick={() => selectProduct(product)}><span className="choice-photo"><Image src={product.image} alt="" fill sizes="96px" /></span><span className="choice-copy"><b>{product.name}</b><small>{product.usage}</small><em>{product.capacity}</em></span><strong>{product.price} €</strong>{selectedProduct.id === product.id && <i><CheckIcon /></i>}</button>)}</div></section>}
 
-              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4</span><h3>Quel accord réveillera vos tenues ?</h3><p>Quatre palettes pensées pour être faciles à porter, jamais sages.</p></header><div className="palette-cards">{palettes.map((option) => <button type="button" key={option.name} className={palette.name === option.name ? 'selected' : ''} onClick={() => selectPalette(option)}><span className="palette-photo"><Image src={option.image} alt="" fill sizes="180px" /></span><span className="palette-card-copy"><span className="duo-swatch" style={{ '--c1': option.colors[0], '--c2': option.colors[1] }} /><small>{option.mood}</small><b>{option.name}</b><em>{option.label}</em><p>{option.benefit}</p></span>{palette.name === option.name && <i><CheckIcon /></i>}</button>)}</div></section>}
+              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4 · {selectedProduct.name}</span><h3>Habillez votre {selectedProduct.name}.</h3><p>Les quatre accords sont appliqués à cette forme précise — proportions, anses et plaque comprises.</p></header><div className="palette-cards">{palettes.map((option) => <button type="button" key={option.name} className={palette.name === option.name ? 'selected' : ''} onClick={() => selectPalette(option)} aria-label={`${option.name} sur ${selectedProduct.name}`}><span className="palette-photo"><Image src={paletteVisuals[selectedProduct.id][option.id]} alt={`${selectedProduct.name} dans la palette ${option.name}`} fill sizes="180px" style={{ objectPosition: selectedProduct.previewPosition }} /></span><span className="palette-card-copy"><span className="duo-swatch" style={{ '--c1': option.colors[0], '--c2': option.colors[1] }} /><small>{option.mood}</small><b>{option.name}</b><em>{option.label}</em><p>{option.benefit}</p></span>{palette.name === option.name && <i><CheckIcon /></i>}</button>)}</div></section>}
 
-              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4</span><h3>Quels détails vous seront vraiment utiles ?</h3><p>Chaque option montre son rendu et son intérêt avant d’être ajoutée.</p></header><div className="finish-cards">{finishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-photo"><Image src={finish.image} alt="" fill sizes="180px" style={{ objectPosition: finish.position }} /></span><span className="finish-card-copy"><b>{finish.name}</b><small>{finish.short}</small><p>{finish.benefit}</p><strong>{finish.price ? `+${finish.price} €` : 'Inclus'}</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
+              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4 · {selectedProduct.name}</span><h3>{selectedProduct.name}, jusque dans les détails.</h3><p>Uniquement les finitions compatibles avec cette forme, montrées sur le bon modèle.</p></header><div className="finish-cards">{availableFinishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); const finishImage = finish.image || paletteImage; return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-photo"><Image src={finishImage} alt={`${finish.name} sur ${selectedProduct.name}`} fill sizes="180px" style={{ objectPosition: finish.position || 'center' }} /></span><span className="finish-card-copy"><b>{finish.name}</b><small>{finish.short}</small><p>{finish.benefit}</p><strong>{finish.price ? `+${finish.price} €` : 'Inclus'}</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
 
-              {activeStep === 3 && <section className="choice-step monogram-step"><header><span>Étape 4 sur 4</span><h3>À qui appartient cette pièce ?</h3><p>Ajoutez jusqu’à trois lettres sur la plaque dorée. Cette option reste facultative.</p></header><div className="monogram-layout"><div className="monogram-photo"><Image src="/images/rosalie.png" alt="Plaque dorée MAYLUNE sur le sac Rosalie" fill sizes="240px" /></div><div className="monogram-control"><span className="gold-plaque">{initials || 'ML'}</span><label htmlFor="initials">Vos initiales <small>+8 €</small></label><div><input id="initials" value={initials} onChange={(event) => updateInitials(event.target.value)} placeholder="Ex. AL" maxLength={3} /><span>{initials.length}/3</span></div><p>La position et la taille restent identiques à la plaque présentée.</p></div></div></section>}
+              {activeStep === 3 && <section className="choice-step monogram-step"><header><span>Étape 4 sur 4 · {selectedProduct.name}</span><h3>Signez votre {selectedProduct.name}.</h3><p>La plaque est simulée sur votre modèle dans la palette {palette.name}. Jusqu’à trois lettres, toujours facultatives.</p></header><div className="monogram-layout"><div className="monogram-photo"><Image src={paletteImage} alt={`${selectedProduct.name} ${palette.name} avec aperçu de plaque`} fill sizes="240px" style={{ objectPosition: selectedProduct.previewPosition }} /><span className="monogram-photo-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials || 'ML'}</span></div><div className="monogram-control"><span className="gold-plaque">{initials || 'ML'}</span><label htmlFor="initials">Vos initiales <small>+8 €</small></label><div><input id="initials" value={initials} onChange={(event) => updateInitials(event.target.value)} placeholder="Ex. AL" maxLength={3} /><span>{initials.length}/3</span></div><p>Aperçu positionné sur votre {selectedProduct.name}. La taille finale est validée par l’atelier.</p></div></div></section>}
             </div>
 
             <div className="config-footer">
@@ -424,19 +459,19 @@ export default function Home() {
       </section>
 
       <section className="value-story section">
-        <div className="value-image reveal"><Image src="/images/evening.png" alt="Sac MAYLUNE chocolat et framboise porté le soir" fill sizes="(max-width: 800px) 100vw, 52vw" /><span>Du matin au soir</span></div>
+        <div className="value-image reveal"><Image src="/images/evening.webp" alt="Sac MAYLUNE chocolat et framboise porté le soir" fill sizes="(max-width: 800px) 100vw, 52vw" /><span>Du matin au soir</span></div>
         <div className="value-copy reveal"><p className="eyebrow">Ce que vous achetez vraiment</p><h2>Une pièce qui donne une direction à votre tenue.</h2><p>Vous ne cherchez plus le sac qui ira « à peu près ». Vous partez de vos vêtements, de vos habitudes et des couleurs qui vous attirent déjà.</p><ol><li><span>01</span><div><h3>Il réveille vos basiques</h3><p>Un accord bien choisi suffit à transformer un jean, un trench ou une robe noire.</p></div></li><li><span>02</span><div><h3>Il ne ressemble pas à une série</h3><p>La forme est MAYLUNE. L’association, les détails et la plaque sont les vôtres.</p></div></li><li><span>03</span><div><h3>Il suit votre vraie journée</h3><p>Le format et les finitions partent de ce que vous emportez et de la façon dont vous le portez.</p></div></li></ol><a className="text-link" href="#personnaliser">Reprendre ma composition <ArrowIcon /></a></div>
       </section>
 
       <section className="craft" id="savoir-faire">
-        <div className="craft-image reveal"><Image src="/images/atelier.png" alt="Artisane crochetant un sac MAYLUNE bleu" fill sizes="(max-width: 800px) 100vw, 50vw" /><div><span>Le geste MAYLUNE</span><strong>Maille après maille</strong></div></div>
+        <div className="craft-image reveal"><Image src="/images/atelier.webp" alt="Artisane crochetant un sac MAYLUNE bleu" fill sizes="(max-width: 800px) 100vw, 50vw" /><div><span>Le geste MAYLUNE</span><strong>Maille après maille</strong></div></div>
         <div className="craft-copy reveal"><p className="eyebrow">Fait à la commande</p><h2>Votre composition lance le geste.</h2><p className="craft-lead">La fabrication ne commence qu’après vos choix. La forme, les fils et les finitions sont préparés pour une seule pièce : la vôtre.</p><ol><li><span>01</span><div><h3>La composition est vérifiée</h3><p>Forme, accord de couleurs et options sont réunis sur une fiche d’atelier.</p></div></li><li><span>02</span><div><h3>Le sac prend forme</h3><p>Le corps, les anses et la doublure sont assemblés puis contrôlés.</p></div></li><li><span>03</span><div><h3>Les finitions sont posées</h3><p>Plaque, chaîne et poche sont vérifiées avant la mise en écrin.</p></div></li></ol><div className="craft-fact"><strong>7–12 jours</strong><span>Estimation de confection avant expédition</span></div></div>
       </section>
 
       <section className="ritual section">
         <div className="ritual-copy reveal"><p className="eyebrow">L’arrivée</p><h2>Le premier porté commence avant d’ouvrir la boîte.</h2><p>Votre sac arrive protégé dans son écrin, avec sa composition et ses conseils d’entretien. Pas un colis anonyme : le dernier chapitre de ce que vous avez choisi.</p><a className="button button-dark" href="#personnaliser">Composer le mien <ArrowIcon /></a></div>
-        <figure className="ritual-main reveal"><Image src="/images/unboxing.png" alt="Ouverture de l’écrin bleu MAYLUNE" fill sizes="(max-width: 800px) 100vw, 48vw" /><figcaption>Écrin MAYLUNE · inclus</figcaption></figure>
-        <figure className="ritual-detail reveal"><Image src="/images/rosalie.png" alt="Détail du sac Rosalie framboise MAYLUNE" fill sizes="(max-width: 800px) 70vw, 24vw" /><figcaption>Votre accord · votre plaque</figcaption></figure>
+        <figure className="ritual-main reveal"><Image src="/images/unboxing.webp" alt="Ouverture de l’écrin bleu MAYLUNE" fill sizes="(max-width: 800px) 100vw, 48vw" /><figcaption>Écrin MAYLUNE · inclus</figcaption></figure>
+        <figure className="ritual-detail reveal"><Image src="/images/rosalie.webp" alt="Détail du sac Rosalie framboise MAYLUNE" fill sizes="(max-width: 800px) 70vw, 24vw" /><figcaption>Votre accord · votre plaque</figcaption></figure>
       </section>
 
       <section className="faq section" id="faq">

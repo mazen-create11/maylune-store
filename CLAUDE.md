@@ -18,6 +18,7 @@ Prototype e-commerce Next.js d’une marque premium de sacs crochetés personnal
 - Typographie : Bodoni 72/Didot pour l’éditorial, Avenir Next/Manrope pour l’interface.
 - Ton : français précis, désirable et concret. Éviter les clichés génériques du luxe.
 - Parcours : silhouette → palette → détails → plaque, avec aperçu et prix en direct.
+- Continuité visuelle obligatoire : les 4 palettes, les finitions, la plaque et le panier doivent toujours conserver la silhouette choisie.
 
 ## Vérification
 
@@ -52,6 +53,8 @@ Décisions actées du 03/08 :
 - **Grille prix v2 alignée sous marché** (benchmark ELOOP/Laïli/Reka/LelouPassion/adèle.d) : Rosalie 59 € · Capri 74 € · Colette 109 € · Mini Muse 55 € · chaîne 8 € · poche 10 € · initiales 8 € · livraison offerte dès 79 €. Les concurrents incluent les options gratuitement : nos options payantes basses sont une différenciation assumée.
 - Panneau composition = « étiquette d'atelier » (filet or, prix décomposé base + options) ; stepper à coches or ; configurateur mobile à une seule image (aperçu détail masqué ≤900px).
 - Micro-typographie remontée (minimum 9px, courant 10-12px) — ne pas redescendre.
+- Configurateur complet : matrice 4 silhouettes × 4 palettes, finitions propres à chaque modèle et plaque d'initiales positionnée sur le sac choisi. Toute nouvelle silhouette doit fournir cette matrice avant publication.
+- Les images servies au navigateur sont en WebP ; les PNG haute définition du configurateur restent des masters locaux ignorés par Git.
 
 Vérification navigateur : harnais `verify-maylune.mjs` dans le scratchpad de session — utiliser le **headless shell** Playwright (`chromium_headless_shell-1208`), jamais l'app Chrome for Testing fenêtrée (dialogues de crash macOS chez Mazen).
 

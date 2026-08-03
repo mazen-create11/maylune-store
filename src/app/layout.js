@@ -8,7 +8,7 @@ export const metadata = {
   openGraph: {
     title: 'MAYLUNE — Personne ne l’aura choisi à votre place',
     description: 'Quatre formes, quatre accords signature et des détails utiles à choisir pas à pas.',
-    images: ['/images/campaign.png'],
+    images: ['/images/campaign.webp'],
   },
 };
 
