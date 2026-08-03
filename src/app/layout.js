@@ -1,5 +1,20 @@
 import './globals.css';
+import localFont from 'next/font/local';
 import { siteUrl } from '../lib/site';
+
+const fraunces = localFont({
+  src: './fonts/fraunces-variable.ttf',
+  variable: '--font-fraunces',
+  display: 'swap',
+  weight: '100 900',
+});
+
+const manrope = localFont({
+  src: './fonts/manrope-variable.ttf',
+  variable: '--font-manrope',
+  display: 'swap',
+  weight: '200 800',
+});
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -28,7 +43,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body className={`${fraunces.variable} ${manrope.variable}`}>{children}</body>
     </html>
   );
 }
