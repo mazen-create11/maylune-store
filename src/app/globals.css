@@ -10,8 +10,6 @@
   --gold: #79572b;
   --line: rgba(36, 23, 19, 0.16);
   --line-light: rgba(255, 253, 249, 0.18);
-  --display: var(--font-fraunces), 'Bodoni 72', Didot, serif;
-  --body: var(--font-manrope), 'Avenir Next', sans-serif;
   --ease: cubic-bezier(0.2, 0.72, 0.2, 1);
   --page: max(40px, calc((100vw - 1440px) / 2));
 }
@@ -24,6 +22,8 @@ html {
 }
 
 body {
+  --display: var(--font-fraunces), 'Bodoni 72', Didot, serif;
+  --body: var(--font-manrope), 'Avenir Next', sans-serif;
   margin: 0;
   overflow-x: hidden;
   background: var(--paper);
