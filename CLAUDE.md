@@ -21,6 +21,7 @@ Prototype e-commerce Next.js d’une marque premium de sacs crochetés personnal
 - Parcours : silhouette → palette → détails → plaque, avec aperçu et prix en direct.
 - Continuité visuelle obligatoire : les 4 palettes, les finitions, la plaque et le panier doivent toujours conserver la silhouette choisie.
 - Mobile : aperçu configurateur compact et sticky ; le CTA du hero doit ouvrir directement `#config-start`.
+- Configurateur desktop : un seul aperçu plein cadre. Ne pas réintroduire de vignette photo flottante par-dessus le produit ; l’état actif est nommé dans le bandeau inférieur.
 - Tant que Shopify n’est pas configuré, ne jamais afficher un faux paiement ou une fausse commande réussie.
 
 ## Activation Shopify

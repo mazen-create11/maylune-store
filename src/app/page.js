@@ -526,25 +526,21 @@ export default function Home() {
               <Image key={configuredPreviewImage} src={configuredPreviewImage} alt={`Composition ${selectedProduct.name}, palette ${palette.name}`} fill sizes="(max-width: 900px) 100vw, 48vw" style={{ objectPosition: activeStep === 2 && focus.type === 'Détail' ? focus.position : selectedProduct.previewPosition }} />
               {activeStep === 3 && initials && <span className="preview-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials}</span>}
               <div className="palette-edge" style={{ '--c1': palette.colors[0], '--c2': palette.colors[1] }} />
-              <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>Votre accord</span><strong>{palette.name}</strong></div></figcaption>
+              <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>{activeStep === 2 && focus.type === 'Détail' ? 'Détail sélectionné' : 'Votre accord'}</span><strong>{activeStep === 2 && focus.type === 'Détail' ? focus.title : palette.name}</strong></div></figcaption>
             </figure>
-            <figure className="detail-preview" key={`${selectedProduct.id}-${focus.type}-${focus.title}`}>
-              <Image src={focus.image} alt={`Aperçu ${focus.title}`} fill sizes="(max-width: 900px) 86vw, 20vw" style={{ objectPosition: focus.position }} />
-              <figcaption><span>{focus.type}</span><strong>{focus.title}</strong><p>{focus.copy}</p></figcaption>
-            </figure>
-            <p className="preview-note"><CheckIcon /> Simulation sur votre {selectedProduct.name} · fils validés avant confection</p>
           </div>
 
           <div className="config-panel" id="config-start">
             <figure className="mobile-config-preview">
               <Image key={`mobile-${configuredPreviewImage}`} src={configuredPreviewImage} alt={`Aperçu de ${selectedProduct.name} dans la palette ${palette.name}`} fill sizes="100vw" style={{ objectPosition: activeStep === 2 && focus.type === 'Détail' ? focus.position : selectedProduct.previewPosition }} />
               {activeStep === 3 && initials && <span className="preview-plaque" style={{ '--plaque-x': selectedProduct.plaquePosition.left, '--plaque-y': selectedProduct.plaquePosition.top }}>{initials}</span>}
-              <figcaption><span>{selectedProduct.name}</span><strong>{palette.name}</strong></figcaption>
+              <figcaption><span>{selectedProduct.name}</span><strong>{activeStep === 2 && focus.type === 'Détail' ? focus.title : palette.name}</strong></figcaption>
             </figure>
             <div className="config-top">
               <div className="config-top-main"><span>Votre composition</span><strong>{selectedProduct.name} · {palette.name}</strong><small>{selectedDetails.join(' · ')}{initials ? ` · Initiales ${initials}` : ''}</small></div>
               <div className="config-top-price"><b>{total} €</b>{total > selectedProduct.price && <small>{selectedProduct.name} {selectedProduct.price} € + options {total - selectedProduct.price} €</small>}</div>
             </div>
+            <p className="config-assurance"><CheckIcon /> L’aperçu conserve votre {selectedProduct.name} à chaque étape.</p>
             <nav className="stepper" aria-label="Étapes de personnalisation">{steps.map((step, index) => <button type="button" key={step} className={`${index === activeStep ? 'active' : ''} ${index < activeStep ? 'done' : ''}`} onClick={() => setActiveStep(index)} aria-current={index === activeStep ? 'step' : undefined} aria-label={`${step}, étape ${index + 1} sur 4`}><span>{index < activeStep ? <CheckIcon /> : `0${index + 1}`}</span><b>{step}</b></button>)}</nav>
 
             <div className="step-content">
