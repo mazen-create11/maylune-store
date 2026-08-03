@@ -11,6 +11,7 @@ const nextConfig = {
     ? {
         output: 'export',
         basePath,
+        trailingSlash: true,
         // loader custom (pas unoptimized) : seul moyen de préfixer basePath sur les src next/image en export
         images: { loader: 'custom', loaderFile: './image-loader.js' },
       }
