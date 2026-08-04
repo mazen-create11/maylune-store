@@ -59,13 +59,13 @@ grep -rn '—' src tests | wc -l   # doit rendre 0 : zéro tiret cadratin dans l
 Deux harnais navigateur (headless shell Playwright, jamais l'app Chrome fenêtrée) :
 
 ```bash
-node verify-maylune.mjs <url>        # parcours complet, 15 contrôles × desktop/mobile
-node tools/audit-couleurs.mjs <url>  # 20 coloris × 4 silhouettes = 80 combinaisons
+node tools/verify-maylune.mjs <url>   # parcours complet, 15 contrôles × desktop/mobile
+node tools/audit-couleurs.mjs <url>   # 20 coloris × 4 silhouettes = 80 combinaisons
 ```
 
-`audit-couleurs` mesure sur les **pixels rendus** (rastérisation du SVG dans un canvas), jamais sur les couleurs théoriques : le halo et le liseré ne sont pas dans le hex du fil. Il compare aussi les zones entre elles en distance perceptuelle Lab, parce que le ratio de luminance ment (lila sur rose bonbon = 1,05 et pourtant parfaitement distincts). À rejouer intégralement le jour où les calques photo remplacent l'illustration.
+Les deux importent playwright-core depuis `/Users/chabanmazen/mazbase/node_modules/playwright-core/index.mjs` et lancent `~/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell`. Pour les captures : scroller par viewport puis attendre, `scroll-behavior: smooth` décale sinon les prises.
 
-Harnais navigateur : `verify-maylune.mjs` (scratchpad de session), 15 contrôles × desktop/mobile. Utiliser playwright-core importé depuis `/Users/chabanmazen/mazbase/node_modules/playwright-core/index.mjs` et le binaire `~/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell` (jamais l’app Chrome for Testing fenêtrée). Captures : par viewport avec scroll progressif ; `scroll-behavior: smooth` décale les captures, scroller puis attendre.
+`audit-couleurs` mesure sur les **pixels rendus** (rastérisation du SVG dans un canvas), jamais sur les couleurs théoriques : le halo et le liseré ne sont pas dans le hex du fil. Il compare aussi les zones entre elles en distance perceptuelle Lab, parce que le ratio de luminance ment (lila sur rose bonbon = 1,05 et pourtant parfaitement distincts). À rejouer intégralement le jour où les calques photo remplacent l'illustration.
 
 ## Déploiement GitHub Pages
 
