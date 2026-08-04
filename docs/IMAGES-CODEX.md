@@ -1,5 +1,35 @@
 # Images à générer (Codex) · état 04/08/2026
 
+## 0. ⭐ PRIORITÉ ABSOLUE : les 4 silhouettes en calques (bascule du moteur d'aperçu)
+
+L'aperçu du configurateur est piloté par un moteur à zones (`bagShapes` dans `src/app/page.js`) : il colore 4 zones selon la recette de la cliente et ajoute chaîne, franges, fil, poche et plaque. Il tourne aujourd'hui en illustration vectorielle. Pour passer aux vraies photos SANS perdre la réactivité, il faut des calques, pas une image plate.
+
+**Contrat par silhouette** (rosalie, capri, colette, mini-muse), fond transparent, cadrage identique d'un calque à l'autre, 1400×1400 PNG puis WebP :
+
+| Fichier | Contenu | Rôle dans le moteur |
+|---|---|---|
+| `<slug>-body.png` | le sac SANS anse, en **blanc/gris neutre** (le fil doit être blanc cassé pour accepter la teinte) | zone 0, teintée par la 1re couleur |
+| `<slug>-handle.png` | l'anse seule, même neutre | zone 1, 2e couleur |
+| `<slug>-band.png` | la bande ou le rabat seul | zone 2, 3e couleur |
+| `<slug>-edge.png` | le bord ou la couture basse | zone 3, 4e couleur |
+| `<slug>-shade.png` | ombres et lumières du sac, en **noir semi-transparent uniquement** | posé en `multiply` par-dessus les zones teintées |
+| `<slug>-chain-or.png` / `-chain-argent.png` | la chaîne seule, dorée / argentée | finition chaîne |
+| `<slug>-fringe.png` | les franges seules, neutres | finition franges, teintée par la 1re couleur |
+| `<slug>-pocket.png` | zip et tirette seuls | finition poche |
+| `<slug>-plaque.png` | la plaque dorée vide (sans lettres) | les initiales sont écrites par-dessus en CSS |
+
+Règles non négociables : **même point de vue, même échelle, même éclairage** pour tous les calques d'une silhouette (sinon les couches ne se superposent pas) ; fil photographié en blanc neutre, jamais coloré (la teinte est appliquée en CSS) ; aucune ombre portée dans les calques de zone (elle vit dans `-shade`).
+
+Prompt modèle (remplacer le slug et la partie) :
+> Photo produit d'un sac au crochet en fil de coton **blanc cassé neutre**, {DESCRIPTION DE LA FORME}, photographié de face, éclairage studio doux et uniforme, fond transparent, aucune ombre portée, cadrage centré identique, maille bien lisible, style catalogue premium. Ne montrer que {LA PARTIE}, le reste du sac absent.
+
+Descriptions de forme : rosalie = mini sac à rabat structuré et anse courte ; capri = sac épaule arrondi en croissant à anse tressée ; colette = cabas rectangulaire à deux anses ; mini-muse = mini sac épaule ovale.
+
+Quand les calques sont livrés, je bascule le moteur dessus : la logique de zones, les finitions et le prix ne changent pas d'une ligne.
+
+---
+
+
 Le site fonctionne sans elles (pastilles CSS en attendant). Chaque photo livrée remplace sa pastille automatiquement après câblage (1 ligne par coloris).
 
 ## 1. Les 16 pelotes du nuancier (priorité)
