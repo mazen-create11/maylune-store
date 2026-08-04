@@ -25,12 +25,12 @@ const products = [
     name: 'Capri',
     type: 'Sac épaule souple',
     price: 69,
-    image: '/images/capri.webp',
-    alt: 'Sac Capri MAYLUNE crocheté à la main',
+    image: '/images/palette-french-kiss.webp',
+    alt: 'Sac Capri MAYLUNE framboise à anse tressée bordeaux',
     badge: 'Signature',
     usage: 'Pour tous les jours',
     capacity: 'Portefeuille · clés · lunettes',
-    plaquePosition: { left: '56%', top: '80%' },
+    plaquePosition: { left: '63%', top: '74%' },
     previewPosition: 'center',
   },
   {
@@ -109,7 +109,7 @@ const faqs = [
   },
   {
     q: 'Quand vais-je recevoir ma création ?',
-    a: 'Prévoyez 7 à 12 jours ouvrés de confection, puis 2 à 4 jours de livraison en France métropolitaine. Vous recevez un e-mail au démarrage de l’atelier, puis le suivi du colis.',
+    a: 'Prévoyez 7 à 12 jours ouvrés de confection, puis 2 à 4 jours de livraison en France métropolitaine. La livraison est offerte dès 79 € ; sous ce seuil, le tarif exact s’affiche au moment du paiement selon votre adresse. Vous recevez un e-mail au démarrage de l’atelier, puis le suivi du colis.',
   },
   {
     q: 'Que puis-je personnaliser exactement ?',
@@ -121,7 +121,7 @@ const faqs = [
   },
   {
     q: 'Puis-je modifier ou retourner ma commande ?',
-    a: 'Écrivez-nous dans les 12 heures : tant que la confection n’a pas commencé, couleurs et finitions restent modifiables. Une pièce crochetée selon vos choix ne peut pas être remise en vente ; en cas de défaut, l’atelier vous propose une solution avec photos à l’appui.',
+    a: 'Tant que la confection n’a pas commencé, couleurs et finitions restent modifiables : le moyen de contact de l’atelier figurera dans votre e-mail de confirmation. Une pièce crochetée selon vos choix ne peut pas être remise en vente ; en cas de défaut, l’atelier vous propose une solution avec photos à l’appui.',
   },
   {
     q: 'Comment entretenir le crochet ?',
@@ -239,6 +239,7 @@ export default function Home() {
   const menuCloseRef = useRef(null);
   const cartCloseRef = useRef(null);
   const lastTriggerRef = useRef(null);
+  const lastAddRef = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -306,7 +307,7 @@ export default function Home() {
 
   function showNotice(message) {
     setNotice(message);
-    window.setTimeout(() => setNotice(''), 2400);
+    window.setTimeout(() => setNotice(''), 3000);
   }
 
   function openDrawer(type, trigger) {
@@ -344,6 +345,10 @@ export default function Home() {
   }
 
   function addConfiguredBag(trigger) {
+    // garde anti double-clic : deux clics rapprochés ne doivent produire qu'un article
+    if (lastAddRef.current) return;
+    lastAddRef.current = true;
+    window.setTimeout(() => { lastAddRef.current = false; }, 800);
     const configurationId = crypto.randomUUID();
     addToCart({
       id: `${selectedProduct.id}-${configurationId}`,
@@ -360,6 +365,10 @@ export default function Home() {
       image: selectedProduct.image,
       details: `${recipeNames.join(' · ')}${selectedDetails.length ? ` · ${selectedDetails.join(', ')}` : ''}${initials ? ` · ${initials}` : ''}`,
     }, trigger);
+    // la composition suivante repart propre : finitions et gravure ne s'héritent pas en silence
+    setSelectedFinishes([]);
+    setInitials('');
+    setActiveStep(0);
   }
 
   async function proceedToCheckout() {
@@ -414,7 +423,8 @@ export default function Home() {
   }
 
   function updateInitials(value) {
-    setInitials(value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3));
+    // é → E, ç → C : on translittère avant de filtrer pour ne pas avaler les accents
+    setInitials(value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3));
   }
 
   const faqSchema = {
@@ -469,7 +479,7 @@ export default function Home() {
         <figure className="hero-visual">
           <Image src="/images/hero-maylune.webp" alt="Mini sac MAYLUNE crocheté porté avec une tenue en lin" fill priority fetchPriority="high" sizes="(max-width: 800px) 100vw, 55vw" />
           <a className="mobile-hero-cta button button-light" href="#config-start">Composer mon sac <ArrowIcon /></a>
-          <figcaption><span>Mini Muse</span><strong>Composée main</strong></figcaption>
+          <figcaption><span>Mini Muse · composée main</span><strong>Dès 49 €</strong></figcaption>
           <div className="hero-seal"><span>M</span><small>Composé<br />pour vous</small></div>
         </figure>
       </section>
@@ -588,7 +598,7 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-top"><Brand light /><p>Des sacs crochetés à la commande.<br />Des recettes de couleurs choisies par vous.</p><span className="footer-signature">Vos couleurs · votre sac</span></div>
         <div className="footer-links"><div><h3>Découvrir</h3><a href="#collection">Les silhouettes</a><a href="#config-start">Composer mon sac</a></div><div><h3>Comprendre</h3><a href="#savoir-faire">Le savoir-faire</a><a href="#faq">Livraison & retours</a><a href="#faq">Entretien</a></div><div><h3>Informations</h3><a href="./informations-legales/">Informations légales</a><a href="#faq">Délais et personnalisation</a></div></div>
-        <div className="footer-payments"><div><span>{commerceReady ? 'Paiement sécurisé' : 'Ouverture prochaine'}</span><small>{commerceReady ? 'Les moyens disponibles s’affichent au paiement Shopify.' : 'Le configurateur est disponible ; le paiement reste désactivé.'}</small></div>{commerceReady ? <PaymentLogos light /> : <span className="footer-commerce-status"><CheckIcon /> Connexion Shopify prête</span>}</div>
+        <div className="footer-payments"><div><span>{commerceReady ? 'Paiement sécurisé' : 'Ouverture prochaine'}</span><small>{commerceReady ? 'Les moyens disponibles s’affichent au paiement Shopify.' : 'Le configurateur est disponible ; le paiement reste désactivé.'}</small></div>{commerceReady ? <PaymentLogos light /> : <span className="footer-commerce-status"><CheckIcon /> Ouverture des commandes en préparation</span>}</div>
         <div className="footer-bottom"><span>© 2026 MAYLUNE</span><a href="./informations-legales/">Conditions · Confidentialité · Mentions</a><span>France · EUR €</span></div>
       </footer>
     </main>

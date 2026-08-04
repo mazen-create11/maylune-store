@@ -3,10 +3,12 @@ import localFont from 'next/font/local';
 import { siteUrl } from '../lib/site';
 
 const fraunces = localFont({
-  src: './fonts/fraunces-variable.ttf',
+  src: [
+    { path: './fonts/fraunces-variable.ttf', weight: '100 900', style: 'normal' },
+    { path: './fonts/fraunces-italic-variable.ttf', weight: '100 900', style: 'italic' },
+  ],
   variable: '--font-fraunces',
   display: 'swap',
-  weight: '100 900',
 });
 
 const manrope = localFont({

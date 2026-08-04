@@ -34,6 +34,7 @@ body {
   font-family: var(--body);
   font-size: 15px;
   font-variant-numeric: lining-nums tabular-nums;
+  font-variation-settings: 'SOFT' 55;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
@@ -154,7 +155,7 @@ svg {
 .icon-button svg { width: 22px; }
 .cart-button { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; }
 .cart-button svg { width: 18px; }
-.cart-button b { display: grid; width: 20px; height: 20px; place-items: center; background: var(--accent); border-radius: 50%; color: white; font-size: 10px; }
+.cart-button b { display: grid; width: 20px; height: 20px; place-items: center; background: var(--accent); border-radius: 50%; color: white; font-size: 10px; font-weight: 700; }
 .mobile-only { display: none; }
 
 .drawer {
@@ -271,9 +272,9 @@ svg {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-variation-settings: 'SOFT' 55;
   letter-spacing: -.04em;
   line-height: .98;
+  text-wrap: balance;
 }
 .hero h1 { max-width: 760px; font-size: clamp(58px, 6.4vw, 104px); }
 h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
@@ -326,7 +327,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .section { padding: clamp(95px, 9vw, 145px) var(--page); }
 .section-heading, .config-intro { display: grid; grid-template-columns: 1.25fr minmax(300px, 420px); align-items: end; gap: clamp(50px, 8vw, 130px); margin-bottom: 58px; }
 .section-heading h2, .config-intro h2, .craft-copy h2, .ritual-copy h2, .faq-intro h2 { font-size: clamp(45px, 4.8vw, 76px); }
-.section-heading > p, .config-intro > p, .craft-lead, .ritual-copy > p, .faq-intro > p { margin: 0 0 5px; color: var(--ink-soft); font-size: 14px; line-height: 1.8; }
+.section-heading > p, .config-intro > p, .craft-lead, .ritual-copy > p:not(.eyebrow), .faq-intro > p:not(.eyebrow) { margin: 0 0 5px; color: var(--ink-soft); font-size: 14px; line-height: 1.8; }
 
 .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; }
 .product-card { min-width: 0; }
@@ -354,7 +355,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 
 .configurator { background: var(--surface-warm); }
 .config-intro > p { max-width: 390px; }
-.config-shell { display: grid; grid-template-columns: minmax(0, .9fr) minmax(560px, 1.1fr); max-width: 1440px; margin: auto; overflow: hidden; background: var(--surface); border-radius: 24px; box-shadow: 0 30px 80px rgba(90, 31, 49, .13); }
+.config-shell { display: grid; grid-template-columns: minmax(0, .9fr) minmax(560px, 1.1fr); max-width: 1440px; margin: auto; overflow: clip; background: var(--surface); border-radius: 24px; box-shadow: 0 30px 80px rgba(90, 31, 49, .13); }
 .config-visual { position: relative; min-width: 0; align-self: stretch; background: var(--ink); }
 .main-preview { position: sticky; top: 88px; min-height: 850px; margin: 0; overflow: hidden; }
 .main-preview > img { object-fit: cover; animation: preview-swap .42s var(--ease); }
@@ -364,7 +365,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .main-preview > figcaption { position: absolute; right: 20px; bottom: 20px; left: 20px; display: flex; justify-content: space-between; gap: 20px; padding: 15px 17px; background: rgba(56, 22, 31, .82); border-radius: var(--r-card); color: white; backdrop-filter: blur(12px); }
 .main-preview figcaption > div { display: flex; min-width: 0; flex-direction: column; }
 .main-preview figcaption > div:last-child { text-align: right; }
-.main-preview figcaption span { color: rgba(255, 255, 255, .62); font-size: 9px; font-weight: 680; letter-spacing: .14em; text-transform: uppercase; }
+.main-preview figcaption span { color: rgba(255, 255, 255, .68); font-size: 10px; font-weight: 680; letter-spacing: .14em; text-transform: uppercase; }
 .main-preview figcaption strong { font-family: var(--display); font-size: 21px; font-weight: 400; }
 .figcaption-recipe { overflow: hidden; max-width: 100%; font-size: 15px !important; line-height: 1.9; text-overflow: ellipsis; white-space: nowrap; }
 @keyframes preview-swap { from { opacity: .35; transform: scale(1.018); } }
@@ -409,25 +410,25 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .choice-copy { display: flex; min-width: 0; flex-direction: column; }
 .choice-copy b { font-family: var(--display); font-size: 21px; font-weight: 400; }
 .choice-copy small { color: var(--ink); font-size: 10px; font-weight: 650; }
-.choice-copy em { margin-top: 3px; overflow: hidden; color: var(--ink-soft); font-size: 9px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+.choice-copy em { margin-top: 3px; overflow: hidden; color: var(--ink-soft); font-size: 10px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
 .shape-options button > strong { font-size: 10px; white-space: nowrap; }
 .shape-options button > i { position: absolute; top: 8px; right: 8px; display: grid; width: 21px; height: 21px; place-items: center; background: var(--accent); border-radius: 50%; color: white; }
 .shape-options button > i svg { width: 12px; }
 
 .yarn-families { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 28px; }
-.yarn-family > span { display: block; margin-bottom: 9px; color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.yarn-family > span { display: block; margin-bottom: 9px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 .yarn-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .yarn-choice { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 9px 4px 8px; background: transparent; border: 1px solid transparent; border-radius: var(--r-chip); cursor: pointer; transition: .2s var(--ease); }
 .yarn-choice:hover { background: var(--paper); }
 .yarn-choice.selected { background: var(--paper); border-color: var(--accent); }
 .yarn-well { position: relative; }
 .yarn-well b { position: absolute; top: -5px; right: -7px; display: grid; width: 20px; height: 20px; place-items: center; background: var(--accent); border: 2px solid var(--surface); border-radius: 50%; color: white; font-size: 10px; }
-.yarn-choice small { overflow: hidden; max-width: 100%; color: var(--ink-soft); font-size: 9px; font-weight: 650; letter-spacing: .02em; text-overflow: ellipsis; white-space: nowrap; }
+.yarn-choice small { overflow: hidden; max-width: 100%; color: var(--ink-soft); font-size: 10px; font-weight: 650; letter-spacing: .02em; text-overflow: ellipsis; white-space: nowrap; }
 .yarn-choice.selected small { color: var(--ink); }
 
 .recipe { margin-top: 22px; padding: 17px 17px 15px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); }
 .recipe-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
-.recipe-head span { color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.recipe-head span { color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
 .recipe-head b { font-size: 11px; font-weight: 650; }
 .recipe-bar { display: flex; height: 14px; overflow: hidden; margin: 12px 0 13px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(56, 22, 31, .12); }
 .recipe-bar i { transition: width .3s var(--ease); }
@@ -435,7 +436,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .recipe-chips button { display: flex; min-height: 44px; align-items: center; gap: 9px; padding: 5px 13px 5px 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; transition: border-color .2s; }
 .recipe-chips button:hover { border-color: var(--accent); }
 .recipe-chips span { display: flex; flex-direction: column; align-items: flex-start; }
-.recipe-chips small { color: var(--ink-soft); font-size: 9px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
+.recipe-chips small { color: var(--ink-soft); font-size: 10px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
 .recipe-chips b { font-size: 12px; font-weight: 650; }
 .recipe-chips em { color: var(--ink-soft); font-size: 15px; font-style: normal; }
 .recipe-note { display: flex; align-items: center; gap: 8px; margin: 13px 0 0; color: var(--ink-soft); font-size: 10px; }
@@ -465,14 +466,14 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .monogram-control { display: flex; align-items: stretch; justify-content: center; flex-direction: column; padding: clamp(24px, 3vw, 42px); background: var(--paper); }
 .gold-plaque { display: grid; width: 116px; height: 46px; place-items: center; margin-bottom: 34px; background: linear-gradient(135deg, #a97828, #f7dc91 48%, #99671e); border: 1px solid #9f7028; border-radius: 50%; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .25), 0 12px 25px rgba(62, 37, 10, .14); color: #53350f; font-family: var(--display); font-size: 18px; letter-spacing: .16em; }
 .monogram-control label { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase; }
-.monogram-control label small { color: var(--accent); }
+.monogram-control label small { color: var(--accent); font-size: 10px; }
 .monogram-control > div { display: grid; grid-template-columns: 1fr auto; align-items: center; border-bottom: 1px solid var(--ink); }
 .monogram-control input { min-width: 0; min-height: 49px; padding: 0; background: transparent; border: 0; outline: 0; font-family: var(--display); font-size: 25px; letter-spacing: .14em; text-transform: uppercase; }
 .monogram-control > div span { color: var(--ink-soft); font-size: 10px; }
 .monogram-control > p { margin: 12px 0 0; color: var(--ink-soft); font-size: 10px; }
 
 .config-footer { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--line); }
-.config-recap > span { color: var(--ink-soft); font-size: 9px; font-weight: 680; letter-spacing: .13em; text-transform: uppercase; }
+.config-recap > span { color: var(--ink-soft); font-size: 10px; font-weight: 680; letter-spacing: .13em; text-transform: uppercase; }
 .config-recap p { margin: 3px 0 16px; font-family: var(--display); font-size: 17px; }
 .config-actions { display: flex; gap: 8px; }
 .config-actions .button { flex: 1; }
@@ -511,7 +512,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
 .ritual-main { min-height: 700px; }
 .ritual-detail { min-height: 430px; }
 .ritual-main img, .ritual-detail img { object-fit: cover; }
-.ritual-main figcaption, .ritual-detail figcaption { position: absolute; right: 12px; bottom: 12px; left: 12px; padding: 10px 13px; background: rgba(253, 247, 245, .9); border-radius: 999px; font-size: 9px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase; }
+.ritual-main figcaption, .ritual-detail figcaption { position: absolute; right: 12px; bottom: 12px; left: 12px; padding: 10px 13px; background: rgba(253, 247, 245, .9); border-radius: 999px; font-size: 10px; font-weight: 680; letter-spacing: .1em; text-transform: uppercase; }
 
 .faq { display: grid; grid-template-columns: .68fr 1.32fr; gap: clamp(60px, 10vw, 160px); background: var(--surface); }
 .faq-intro { align-self: start; position: sticky; top: 115px; }
@@ -615,7 +616,7 @@ h1 em, h2 em { color: var(--accent); font-style: italic; font-weight: 400; }
   .brand-mark { width: 24px; height: 24px; }
   .hero-visual { min-height: 61svh; }
   .hero-visual > img { object-position: 57% center; }
-  .hero-seal { width: 74px; height: 74px; }
+  .hero-seal { width: 84px; height: 84px; }
   .mobile-hero-cta { position: absolute; z-index: 3; right: 18px; bottom: 90px; left: 18px; display: flex; min-height: 56px; }
   .hero-copy { padding: 47px 18px 55px; }
   .hero h1 { font-size: clamp(52px, 15vw, 68px); line-height: .96; }
