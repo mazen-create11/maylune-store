@@ -19,7 +19,7 @@ test('le catalogue propose quatre signatures', () => {
 test('le nuancier libre 1 à 4 couleurs est en place', () => {
   // décision du 04/08/2026 : couleurs incluses (min 1, max 4), options matière payantes
   // famille « Les froids » ajoutée le 04/08/2026 sur confirmation du stock (bleus + sauge)
-  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'Cobalt', 'Sauge', 'Le corps', 'Quatre fils maximum', 'au moins une couleur']) {
+  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'Cobalt', 'Sauge', 'Le corps', 'L’anse', 'La bande', 'Le bord']) {
     assert.ok(page.includes(term), `nuancier incomplet : ${term}`);
   }
   const colorCount = (page.match(/family: 'Les /g) || []).length;
@@ -31,7 +31,7 @@ test('l’aperçu réagit à la composition (moteur par zones)', () => {
   for (const shape of ['rosalie:', 'capri:', 'colette:', "'mini-muse':"]) {
     assert.ok(page.includes(shape), `silhouette absente du moteur d’aperçu : ${shape}`);
   }
-  for (const term of ['bagShapes', 'BagPreview', 'zoneColor', 'data-finish="franges"', 'data-plaque-text', 'Quatre finitions maximum']) {
+  for (const term of ['bagShapes', 'BagPreview', 'zoneColor', 'data-finish="franges"', 'data-plaque-text', 'Quatre finitions maximum', 'paintZone']) {
     assert.ok(page.includes(term), `moteur d’aperçu incomplet : ${term}`);
   }
   // chaque silhouette expose les 4 zones colorables et ses ancrages
@@ -70,5 +70,23 @@ test('les paiements sont intégrés et les duos retirés', () => {
   // duos retirés sur décision du 03/08/2026 : ne doivent pas réapparaître sans ordre
   for (const term of ['Le Duo Couleur', 'Le Weekender', 'Le Duo Sœurs']) {
     assert.ok(!page.includes(term), `duo présent alors que retiré : ${term}`);
+  }
+});
+
+test('les recettes composées et le partage sont en place', () => {
+  // 04/08/2026 : chaque zone pioche dans les 20 coloris ; « Surprenez-moi » tire dans des accords
+  // écrits à la main (jamais de couleurs au hasard), et la composition s'exporte en image.
+  const recipeBlock = page.slice(page.indexOf('const curatedRecipes'), page.indexOf('// Options payantes'));
+  const count = (recipeBlock.match(/mood:/g) || []).length;
+  assert.ok(count >= 12, `au moins 12 recettes composées attendues, trouvé ${count}`);
+  for (const mood of ['Ton sur ton', 'Contraste doux', 'Franc']) {
+    assert.ok(recipeBlock.includes(mood), `famille d’accord manquante : ${mood}`);
+  }
+  for (const term of ['surpriseMe', 'Surprenez-moi', 'shareComposition', 'Voici mon MAYLUNE', 'toBlob']) {
+    assert.ok(page.includes(term), `fonctionnalité manquante : ${term}`);
+  }
+  // chaque recette doit colorer les 4 zones, sinon une zone resterait vide
+  for (const zone of ['body:', 'handle:', 'band:', 'edge:']) {
+    assert.equal((recipeBlock.match(new RegExp(zone, 'g')) || []).length, 12, `recette incomplète sur ${zone}`);
   }
 });

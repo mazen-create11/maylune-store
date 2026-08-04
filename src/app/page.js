@@ -61,9 +61,9 @@ const bagShapes = {
   rosalie: {
     handle: [{ d: 'M150,138 C158,82 242,82 250,138', width: 15 }],
     parts: [
-      { role: 0, d: 'M102,146 h196 a26,26 0 0 1 26,26 v84 a32,32 0 0 1 -32,32 h-184 a32,32 0 0 1 -32,-32 v-84 a26,26 0 0 1 26,-26 z', stitch: true, vol: true },
-      { role: 2, d: 'M102,146 h196 a26,26 0 0 1 26,26 v10 a30,30 0 0 1 -30,30 h-188 a30,30 0 0 1 -30,-30 v-10 a26,26 0 0 1 26,-26 z', stitch: true, vol: true },
-      { role: 3, d: 'M88,208 h224 a6,6 0 0 1 6,6 a6,6 0 0 1 -6,6 h-224 a6,6 0 0 1 -6,-6 a6,6 0 0 1 6,-6 z' },
+      { zone: 'body', d: 'M102,146 h196 a26,26 0 0 1 26,26 v84 a32,32 0 0 1 -32,32 h-184 a32,32 0 0 1 -32,-32 v-84 a26,26 0 0 1 26,-26 z', stitch: true, vol: true },
+      { zone: 'band', d: 'M102,146 h196 a26,26 0 0 1 26,26 v10 a30,30 0 0 1 -30,30 h-188 a30,30 0 0 1 -30,-30 v-10 a26,26 0 0 1 26,-26 z', stitch: true, vol: true },
+      { zone: 'edge', d: 'M88,208 h224 a6,6 0 0 1 6,6 a6,6 0 0 1 -6,6 h-224 a6,6 0 0 1 -6,-6 a6,6 0 0 1 6,-6 z' },
     ],
     chain: 'M98,172 C64,52 336,52 302,172',
     fringe: { x1: 108, x2: 292, y: 288 },
@@ -74,9 +74,9 @@ const bagShapes = {
   capri: {
     handle: [{ d: 'M116,176 C130,56 270,56 284,176', width: 24, braided: true }],
     parts: [
-      { role: 0, d: 'M62,196 C62,268 118,312 200,312 C282,312 338,268 338,196 C338,176 310,158 200,158 C90,158 62,176 62,196 Z', stitch: true, vol: true },
-      { role: 2, d: 'M76,184 C112,164 288,164 324,184 L318,196 C284,178 116,178 82,196 Z' },
-      { role: 3, d: 'M120,294 C162,312 238,312 280,294 L274,284 C236,299 164,299 126,284 Z' },
+      { zone: 'body', d: 'M62,196 C62,268 118,312 200,312 C282,312 338,268 338,196 C338,176 310,158 200,158 C90,158 62,176 62,196 Z', stitch: true, vol: true },
+      { zone: 'band', d: 'M76,184 C112,164 288,164 324,184 L318,196 C284,178 116,178 82,196 Z' },
+      { zone: 'edge', d: 'M120,294 C162,312 238,312 280,294 L274,284 C236,299 164,299 126,284 Z' },
     ],
     chain: 'M104,170 C112,40 288,40 296,170',
     fringe: { x1: 130, x2: 270, y: 310 },
@@ -90,9 +90,9 @@ const bagShapes = {
       { d: 'M212,148 C216,90 260,90 264,148', width: 10 },
     ],
     parts: [
-      { role: 0, d: 'M92,150 L308,150 C316,150 322,156 323,164 L338,286 C340,300 330,310 316,310 L84,310 C70,310 60,300 62,286 L77,164 C78,156 84,150 92,150 Z', stitch: true, vol: true },
-      { role: 2, d: 'M74,222 L326,222 L329,250 L71,250 Z' },
-      { role: 3, d: 'M91,150 L309,150 L310,164 L90,164 Z' },
+      { zone: 'body', d: 'M92,150 L308,150 C316,150 322,156 323,164 L338,286 C340,300 330,310 316,310 L84,310 C70,310 60,300 62,286 L77,164 C78,156 84,150 92,150 Z', stitch: true, vol: true },
+      { zone: 'band', d: 'M74,222 L326,222 L329,250 L71,250 Z' },
+      { zone: 'edge', d: 'M91,150 L309,150 L310,164 L90,164 Z' },
     ],
     chain: null,
     fringe: { x1: 96, x2: 304, y: 308 },
@@ -106,9 +106,9 @@ const bagShapes = {
   'mini-muse': {
     handle: [{ d: 'M126,194 C140,94 260,94 274,194', width: 13 }],
     parts: [
-      { role: 0, d: 'M126,192 h148 a48,48 0 0 1 48,48 a48,48 0 0 1 -48,48 h-148 a48,48 0 0 1 -48,-48 a48,48 0 0 1 48,-48 z', stitch: true, vol: true },
-      { role: 2, d: 'M106,212 C152,194 248,194 294,212 L290,222 C246,206 154,206 110,222 Z' },
-      { role: 3, d: 'M112,270 C160,287 240,287 288,270 L284,260 C240,275 160,275 116,260 Z' },
+      { zone: 'body', d: 'M126,192 h148 a48,48 0 0 1 48,48 a48,48 0 0 1 -48,48 h-148 a48,48 0 0 1 -48,-48 a48,48 0 0 1 48,-48 z', stitch: true, vol: true },
+      { zone: 'band', d: 'M106,212 C152,194 248,194 294,212 L290,222 C246,206 154,206 110,222 Z' },
+      { zone: 'edge', d: 'M112,270 C160,287 240,287 288,270 L284,260 C240,275 160,275 116,260 Z' },
     ],
     chain: 'M98,210 C106,54 294,54 302,210',
     fringe: { x1: 116, x2: 284, y: 286 },
@@ -123,10 +123,10 @@ const chainMetals = {
   'chaine-argent': ['#9aa0ab', '#e2e5ea'],
 };
 
-function BagPreview({ shapeId, colors, finishes = [], initials = '', title }) {
+function BagPreview({ shapeId, zones, finishes = [], initials = '', title }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const shape = bagShapes[shapeId];
-  const zoneColor = (role) => colors[role % colors.length];
+  const zoneColor = (id) => yarnColors.find((color) => color.id === zones[id])?.hex || '#ecc4cd';
   const chainId = finishes.find((id) => id === 'chaine-or' || id === 'chaine-argent');
   const filId = finishes.find((id) => id === 'fil-dore' || id === 'fil-argent');
   const hasFringes = finishes.includes('franges');
@@ -156,8 +156,8 @@ function BagPreview({ shapeId, colors, finishes = [], initials = '', title }) {
       </defs>
       <ellipse cx="200" cy="330" rx="128" ry="14" fill="#38161f" opacity=".1" />
       {handles.map((handle, index) => (
-        <g key={index} data-zone="1" data-finish={longHandle ? 'anses' : undefined}>
-          <path d={handle.d} fill="none" stroke={zoneColor(1)} strokeWidth={handle.width} strokeLinecap="round" />
+        <g key={index} data-zone="handle" data-finish={longHandle ? 'anses' : undefined}>
+          <path d={handle.d} fill="none" stroke={zoneColor('handle')} strokeWidth={handle.width} strokeLinecap="round" />
           <path d={handle.d} fill="none" stroke="rgba(255,255,255,.35)" strokeWidth={Math.max(2, handle.width - (handle.braided ? 8 : 10))} strokeLinecap="round" strokeDasharray={handle.braided ? '7 9' : '2 7'} />
         </g>
       ))}
@@ -168,8 +168,8 @@ function BagPreview({ shapeId, colors, finishes = [], initials = '', title }) {
         </g>
       )}
       {shape.parts.map((part, index) => (
-        <g key={index} data-zone={part.role}>
-          <path d={part.d} fill={zoneColor(part.role)} />
+        <g key={index} data-zone={part.zone}>
+          <path d={part.d} fill={zoneColor(part.zone)} />
           {part.stitch && <path d={part.d} fill={`url(#${uid}st)`} />}
           {part.vol && <path d={part.d} fill={`url(#${uid}vol)`} />}
           {index > 0 && <path d={part.d} fill="none" stroke="rgba(56,22,31,.14)" strokeWidth="1.4" />}
@@ -190,7 +190,7 @@ function BagPreview({ shapeId, colors, finishes = [], initials = '', title }) {
       {hasFringes && (
         <g data-finish="franges">
           {Array.from({ length: fringeCount }, (_, index) => (
-            <path key={index} d={`M${(shape.fringe.x1 + index * fringeStep).toFixed(1)},${shape.fringe.y} q2.4,13 0,25`} fill="none" stroke={zoneColor(0)} strokeWidth="3.4" strokeLinecap="round" />
+            <path key={index} d={`M${(shape.fringe.x1 + index * fringeStep).toFixed(1)},${shape.fringe.y} q2.4,13 0,25`} fill="none" stroke={zoneColor('body')} strokeWidth="3.4" strokeLinecap="round" />
           ))}
         </g>
       )}
@@ -228,9 +228,31 @@ const yarnColors = [
 ];
 
 const yarnFamilies = ['Les neutres', 'Les roses', 'Les solaires', 'Les profonds', 'Les froids'];
-// Les rôles nomment la zone réellement colorée dans l'aperçu (voir bagShapes).
-const colorRoles = ['Le corps', 'L’anse', 'La bande', 'Le bord'];
-const recipeShares = { 1: [100], 2: [62, 38], 3: [55, 28, 17], 4: [48, 26, 16, 10] };
+
+// Chaque zone du sac se colore indépendamment parmi les 20 coloris : 1 couleur partout = uni,
+// 4 zones distinctes = 4 couleurs. La contrainte 1 à 4 est structurelle, plus besoin de la policer.
+const bagZones = [
+  { id: 'body', label: 'Le corps', hint: 'La maille principale' },
+  { id: 'handle', label: 'L’anse', hint: 'La prise en main' },
+  { id: 'band', label: 'La bande', hint: 'Le trait du haut' },
+  { id: 'edge', label: 'Le bord', hint: 'La finition basse' },
+];
+
+// Recettes composées à la main : chacune tient debout seule, aucune n'est tirée au sort.
+const curatedRecipes = [
+  { name: 'Blush', mood: 'Ton sur ton', zones: { body: 'rose-poudre', handle: 'vieux-rose', band: 'creme', edge: 'vieux-rose' } },
+  { name: 'Terre cuite', mood: 'Ton sur ton', zones: { body: 'abricot', handle: 'coquelicot', band: 'creme', edge: 'coquelicot' } },
+  { name: 'Après minuit', mood: 'Ton sur ton', zones: { body: 'aubergine', handle: 'violet', band: 'lila', edge: 'violet' } },
+  { name: 'Sable chaud', mood: 'Ton sur ton', zones: { body: 'nude', handle: 'sable', band: 'ivoire', edge: 'sable' } },
+  { name: 'Riviera', mood: 'Contraste doux', zones: { body: 'cobalt', handle: 'ivoire', band: 'ivoire', edge: 'beurre' } },
+  { name: 'Verger', mood: 'Contraste doux', zones: { body: 'sauge', handle: 'creme', band: 'abricot', edge: 'creme' } },
+  { name: 'Bord de mer', mood: 'Contraste doux', zones: { body: 'ciel', handle: 'marine', band: 'ivoire', edge: 'marine' } },
+  { name: 'Pastèque', mood: 'Contraste doux', zones: { body: 'fuchsia', handle: 'sauge', band: 'creme', edge: 'sauge' } },
+  { name: 'Dolce Vita', mood: 'Franc', zones: { body: 'coquelicot', handle: 'beurre', band: 'beurre', edge: 'bordeaux' } },
+  { name: 'French Kiss', mood: 'Franc', zones: { body: 'fuchsia', handle: 'bordeaux', band: 'creme', edge: 'bordeaux' } },
+  { name: 'Encre & moutarde', mood: 'Franc', zones: { body: 'moutarde', handle: 'marine', band: 'ivoire', edge: 'marine' } },
+  { name: 'Guimauve', mood: 'Franc', zones: { body: 'bonbon', handle: 'ivoire', band: 'lila', edge: 'lila' } },
+];
 
 // Options payantes : les couleurs sont incluses, la matière ajoutée se paie.
 const finishCatalog = {
@@ -318,6 +340,14 @@ function CheckIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>;
 }
 
+function SparkIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 4.6 4.6 1.9-4.6 1.9L12 16.5l-1.9-4.6L5.5 10l4.6-1.9z" /><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z" /></svg>;
+}
+
+function ShareIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8.5 7.5L12 4l3.5 3.5" /><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6" /></svg>;
+}
+
 function StarIcon({ off = false }) {
   return <svg className={`star ${off ? 'off' : ''}`} viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.7 5.4 6 .9-4.3 4.2 1 5.9-5.4-2.8-5.4 2.8 1-5.9L3.3 9.7l6-.9z" /></svg>;
 }
@@ -396,8 +426,11 @@ export default function Home() {
   const [cart, setCart] = useState([]);
   const [cartHydrated, setCartHydrated] = useState(false);
   const [checkoutState, setCheckoutState] = useState('idle');
+  const [shareState, setShareState] = useState('idle');
   const [selectedProduct, setSelectedProduct] = useState(products[1]);
-  const [selectedColors, setSelectedColors] = useState(['rose-poudre']);
+  const [zones, setZones] = useState(curatedRecipes[0].zones);
+  const [activeZone, setActiveZone] = useState('body');
+  const [recipeName, setRecipeName] = useState(curatedRecipes[0].name);
   const [selectedFinishes, setSelectedFinishes] = useState([]);
   const [initials, setInitials] = useState('');
   const [activeStep, setActiveStep] = useState(0);
@@ -456,19 +489,12 @@ export default function Home() {
   }, [menuOpen, cartOpen]);
 
   const availableFinishes = finishesByProduct[selectedProduct.id].map((id) => ({ id, ...finishCatalog[id] }));
-  const recipe = selectedColors.map((id, index) => ({
-    color: yarnColors.find((entry) => entry.id === id),
-    share: recipeShares[selectedColors.length][index],
-    role: colorRoles[index],
-  }));
-  const recipeNames = recipe.map((entry) => entry.color.name);
-  const recipeHex = recipe.map((entry) => entry.color.hex);
-  const previewTitle = `${selectedProduct.name} en ${recipe.map((entry) => entry.color.name).join(', ')}${selectedFinishes.length ? `, avec ${selectedFinishes.map((id) => finishCatalog[id].name.toLowerCase()).join(' et ')}` : ''}${initials ? `, plaque gravée ${initials}` : ''}`;
-  const recipeStops = recipe.map((entry, index) => {
-    const from = recipe.slice(0, index).reduce((sum, previous) => sum + previous.share, 0);
-    return `${entry.color.hex} ${from}% ${from + entry.share}%`;
-  });
-  const recipeGradient = `linear-gradient(180deg, ${recipeStops.join(', ')})`;
+  const colorOf = (zoneId) => yarnColors.find((color) => color.id === zones[zoneId]);
+  const distinctColors = [...new Set(bagZones.map((zone) => zones[zone.id]))].map((id) => yarnColors.find((color) => color.id === id));
+  const recipeNames = distinctColors.map((color) => color.name);
+  const recipeLabel = recipeName || recipeNames.join(' · ');
+  const previewTitle = `${selectedProduct.name} : ${bagZones.map((zone) => `${zone.label.toLowerCase()} en ${colorOf(zone.id).name.toLowerCase()}`).join(', ')}${selectedFinishes.length ? `, avec ${selectedFinishes.map((id) => finishCatalog[id].name.toLowerCase()).join(' et ')}` : ''}${initials ? `, plaque gravée ${initials}` : ''}`;
+  const recipeGradient = `linear-gradient(180deg, ${bagZones.map((zone, index) => `${colorOf(zone.id).hex} ${index * 25}% ${(index + 1) * 25}%`).join(', ')})`;
   const optionTotal = selectedFinishes.reduce((sum, id) => sum + finishCatalog[id].price, 0);
   const total = selectedProduct.price + optionTotal + (initials ? 8 : 0);
   const selectedDetails = selectedFinishes.map((id) => finishCatalog[id].name);
@@ -524,15 +550,16 @@ export default function Home() {
       configurationId,
       productId: selectedProduct.id,
       productName: selectedProduct.name,
-      paletteName: recipeNames.join(' · '),
-      colorIds: [...selectedColors],
+      paletteName: bagZones.map((zone) => `${zone.label} ${colorOf(zone.id).name}`).join(' · '),
+      zones: { ...zones },
+      recipeName,
       finishIds: [...selectedFinishes],
       finishNames: [...selectedDetails],
       initials,
       name: `${selectedProduct.name} personnalisé`,
       price: total,
       image: selectedProduct.image,
-      details: `${recipeNames.join(' · ')}${selectedDetails.length ? ` · ${selectedDetails.join(', ')}` : ''}${initials ? ` · ${initials}` : ''}`,
+      details: `${recipeName ? `${recipeName} · ` : ''}${recipeNames.join(' · ')}${selectedDetails.length ? ` · ${selectedDetails.join(', ')}` : ''}${initials ? ` · ${initials}` : ''}`,
     }, trigger);
     // la composition suivante repart propre : finitions et gravure ne s'héritent pas en silence
     setSelectedFinishes([]);
@@ -564,24 +591,22 @@ export default function Home() {
     }
   }
 
-  function toggleColor(color) {
-    if (selectedColors.includes(color.id)) {
-      removeColor(color);
-      return;
-    }
-    if (selectedColors.length === 4) {
-      showNotice(`Quatre fils maximum : retirez une couleur pour essayer ${color.name}.`);
-      return;
-    }
-    setSelectedColors((current) => [...current, color.id]);
+  function paintZone(color) {
+    setZones((current) => ({ ...current, [activeZone]: color.id }));
+    setRecipeName('');
   }
 
-  function removeColor(color) {
-    if (selectedColors.length === 1) {
-      showNotice('Votre sac a besoin d’au moins une couleur.');
-      return;
-    }
-    setSelectedColors((current) => current.filter((id) => id !== color.id));
+  function applyRecipe(recipe) {
+    setZones(recipe.zones);
+    setRecipeName(recipe.name);
+  }
+
+  function surpriseMe() {
+    // on ne tire jamais deux fois la même, et jamais du hasard pur : 12 accords composés
+    const others = curatedRecipes.filter((recipe) => recipe.name !== recipeName);
+    const pick = others[Math.floor(Math.random() * others.length)];
+    applyRecipe(pick);
+    showNotice(`${pick.name} · ${pick.mood.toLowerCase()}`);
   }
 
   function toggleFinish(finish) {
@@ -596,6 +621,74 @@ export default function Home() {
       if (alreadyOn) return current.filter((id) => id !== finish.id);
       return [...current.filter((id) => finishCatalog[id].group !== finish.group), finish.id];
     });
+  }
+
+  // Export « Voici mon MAYLUNE » : le SVG de l'aperçu est rasterisé sur un canvas 1080×1350,
+  // habillé du nom, de la recette et du prix. Partage natif si dispo, sinon téléchargement.
+  async function shareComposition() {
+    const source = document.querySelector('.config-visual .main-preview svg') || document.querySelector('.mobile-config-preview svg');
+    if (!source) return;
+    try {
+      setShareState('loading');
+      const clone = source.cloneNode(true);
+      clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      clone.querySelectorAll('text').forEach((node) => { node.style.fontFamily = 'Manrope, Helvetica, Arial, sans-serif'; });
+      const svgUrl = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(clone)], { type: 'image/svg+xml;charset=utf-8' }));
+      const bitmap = await new Promise((resolve, reject) => {
+        const image = new window.Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = svgUrl;
+      });
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const context = canvas.getContext('2d');
+      const backdrop = context.createRadialGradient(540, 430, 60, 540, 560, 900);
+      backdrop.addColorStop(0, '#4a2029');
+      backdrop.addColorStop(1, '#240e15');
+      context.fillStyle = backdrop;
+      context.fillRect(0, 0, 1080, 1350);
+      context.drawImage(bitmap, 130, 150, 820, 820);
+      URL.revokeObjectURL(svgUrl);
+      context.textAlign = 'center';
+      context.fillStyle = '#f7e9e7';
+      context.font = '600 30px Manrope, sans-serif';
+      context.letterSpacing = '10px';
+      context.fillText('MAYLUNE', 540, 130);
+      context.letterSpacing = '0px';
+      context.font = '400 74px Fraunces, Georgia, serif';
+      context.fillText(`${selectedProduct.name}${recipeName ? ` · ${recipeName}` : ''}`, 540, 1075);
+      context.fillStyle = 'rgba(247,233,231,.72)';
+      context.font = '400 27px Manrope, sans-serif';
+      context.fillText(bagZones.map((zone) => colorOf(zone.id).name).join(' · '), 540, 1130);
+      bagZones.forEach((zone, index) => {
+        context.fillStyle = colorOf(zone.id).hex;
+        context.beginPath();
+        context.arc(432 + index * 72, 1205, 26, 0, Math.PI * 2);
+        context.fill();
+      });
+      context.fillStyle = '#ddb287';
+      context.font = '600 25px Manrope, sans-serif';
+      context.letterSpacing = '5px';
+      context.fillText(`COMPOSÉ PAR MOI · ${total} €`, 540, 1290);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      const file = new File([blob], `maylune-${selectedProduct.id}.png`, { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Mon MAYLUNE', text: `Mon ${selectedProduct.name} composé sur maylune.` });
+      } else {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = file.name;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showNotice('Votre composition a été enregistrée en image.');
+      }
+      setShareState('idle');
+    } catch {
+      setShareState('idle');
+      showNotice('L’image n’a pas pu être créée sur cet appareil.');
+    }
   }
 
   function updateInitials(value) {
@@ -637,7 +730,7 @@ export default function Home() {
       <aside className={`drawer cart-drawer ${cartOpen ? 'open' : ''}`} aria-hidden={!cartOpen} inert={!cartOpen} role="dialog" aria-modal="true" aria-label="Panier" onKeyDown={trapFocus}>
         <div className="drawer-head"><div><span className="micro-label">Votre sélection</span><h2>Le panier</h2></div><button ref={cartCloseRef} type="button" className="icon-button" onClick={closeDrawers} aria-label="Fermer le panier"><CloseIcon /></button></div>
         {cart.length === 0 ? <div className="empty-cart"><BagIcon /><h3>Commencez par une forme.</h3><p>Puis composez les couleurs qui la rendront vôtre.</p><a className="button button-dark" href="#collection" onClick={closeDrawers}>Voir les silhouettes</a></div> : <>
-          <div className="cart-items">{cart.map((item) => <article className="cart-item" key={item.id}><div className="cart-thumb">{item.colorIds ? <BagPreview shapeId={item.productId} colors={item.colorIds.map((id) => yarnColors.find((entry) => entry.id === id)?.hex || '#ecc4cd')} finishes={item.finishIds} initials={item.initials} title={item.details} /> : <Image src={item.image} alt="" fill sizes="88px" />}</div><div><h3>{item.name}</h3><p>{item.details}</p><strong>{item.price} €</strong></div><button type="button" onClick={() => setCart((current) => current.filter((currentItem) => currentItem.id !== item.id))} aria-label={`Retirer ${item.name}`}>×</button></article>)}</div>
+          <div className="cart-items">{cart.map((item) => <article className="cart-item" key={item.id}><div className="cart-thumb">{item.zones ? <BagPreview shapeId={item.productId} zones={item.zones} finishes={item.finishIds} initials={item.initials} title={item.details} /> : <Image src={item.image} alt="" fill sizes="88px" />}</div><div><h3>{item.name}</h3><p>{item.details}</p><strong>{item.price} €</strong></div><button type="button" onClick={() => setCart((current) => current.filter((currentItem) => currentItem.id !== item.id))} aria-label={`Retirer ${item.name}`}>×</button></article>)}</div>
           <div className="cart-footer"><div><span>Sous-total</span><strong>{cartTotal} €</strong></div><p>{cartTotal >= 79 ? 'Livraison offerte en France métropolitaine.' : `Encore ${79 - cartTotal} € pour profiter de la livraison offerte.`}</p><button type="button" className={`button button-accent ${commerceReady ? '' : 'button-pending'}`} onClick={proceedToCheckout} aria-disabled={!commerceReady || checkoutState === 'loading'}>{checkoutState === 'loading' ? 'Préparation du paiement…' : commerceReady ? 'Passer au paiement' : 'Commandes bientôt ouvertes'} <ArrowIcon /></button>{commerceReady ? <><div className="secure-copy"><CheckIcon /> Paiement Shopify chiffré et sécurisé</div><PaymentLogos /></> : <div className="checkout-disclosure"><CheckIcon /> Votre composition est conservée sur cet appareil. Le paiement sera activé à l’ouverture.</div>}</div>
         </>}
       </aside>
@@ -688,41 +781,53 @@ export default function Home() {
           <div className="config-visual">
             <figure className="main-preview">
               <div className="preview-stage">
-                <BagPreview shapeId={selectedProduct.id} colors={recipeHex} finishes={selectedFinishes} initials={initials} title={previewTitle} />
+                <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />
               </div>
               <div className="recipe-edge" style={{ background: recipeGradient }} />
-              <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>Votre recette</span><strong className="figcaption-recipe">{recipeNames.join(' · ')}</strong></div></figcaption>
+              <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>Votre recette</span><strong className="figcaption-recipe">{recipeLabel}</strong></div></figcaption>
             </figure>
           </div>
 
           <div className="config-panel" id="config-start">
             <figure className="mobile-config-preview">
               <div className="preview-stage">
-                <BagPreview shapeId={selectedProduct.id} colors={recipeHex} finishes={selectedFinishes} initials={initials} title={previewTitle} />
+                <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />
               </div>
               <div className="recipe-edge" style={{ background: recipeGradient }} />
-              <figcaption><span>{selectedProduct.name}</span><strong className="figcaption-recipe">{recipeNames.join(' · ')}</strong></figcaption>
+              <figcaption><span>{selectedProduct.name}</span><strong className="figcaption-recipe">{recipeLabel}</strong></figcaption>
             </figure>
             <div className="config-top">
-              <div className="config-top-main"><span>Votre composition</span><strong>{selectedProduct.name}</strong><small>{recipeNames.join(' · ')}{selectedDetails.length ? ` · ${selectedDetails.join(', ')}` : ''}{initials ? ` · ${initials}` : ''}</small></div>
+              <div className="config-top-main"><span>Votre composition</span><strong>{selectedProduct.name}</strong><small>{recipeLabel}{selectedDetails.length ? ` · ${selectedDetails.join(', ')}` : ''}{initials ? ` · ${initials}` : ''}</small></div>
               <div className="config-top-price"><b>{total} €</b><small>{total > selectedProduct.price ? `${selectedProduct.name} ${selectedProduct.price} € + options ${total - selectedProduct.price} €` : 'couleurs incluses'}</small></div>
             </div>
             <nav className="stepper" aria-label="Étapes de personnalisation">{steps.map((step, index) => <button type="button" key={step} className={`${index === activeStep ? 'active' : ''} ${index < activeStep ? 'done' : ''}`} onClick={() => setActiveStep(index)} aria-current={index === activeStep ? 'step' : undefined} aria-label={`${step}, étape ${index + 1} sur 4`}><span>{index < activeStep ? <CheckIcon /> : `0${index + 1}`}</span><b>{step}</b></button>)}</nav>
 
             <div className="step-content">
-              {activeStep === 0 && <section className="choice-step"><header><span>Étape 1 sur 4</span><h3>Quel rythme aura votre sac ?</h3><p>Choisissez selon ce que vous emportez.</p></header><div className="shape-options">{products.map((product) => <button type="button" key={product.id} className={selectedProduct.id === product.id ? 'selected' : ''} onClick={() => selectProduct(product)} aria-pressed={selectedProduct.id === product.id}><span className="choice-photo"><BagPreview shapeId={product.id} colors={recipeHex} title={`${product.name} dans vos couleurs`} /></span><span className="choice-copy"><b>{product.name}</b><small>{product.usage}</small><em>{product.capacity}</em></span><strong>{product.price} €</strong>{selectedProduct.id === product.id && <i><CheckIcon /></i>}</button>)}</div></section>}
+              {activeStep === 0 && <section className="choice-step"><header><span>Étape 1 sur 4</span><h3>Quel rythme aura votre sac ?</h3><p>Choisissez selon ce que vous emportez.</p></header><div className="shape-options">{products.map((product) => <button type="button" key={product.id} className={selectedProduct.id === product.id ? 'selected' : ''} onClick={() => selectProduct(product)} aria-pressed={selectedProduct.id === product.id}><span className="choice-photo"><BagPreview shapeId={product.id} zones={zones} title={`${product.name} dans vos couleurs`} /></span><span className="choice-copy"><b>{product.name}</b><small>{product.usage}</small><em>{product.capacity}</em></span><strong>{product.price} €</strong>{selectedProduct.id === product.id && <i><CheckIcon /></i>}</button>)}</div></section>}
 
-              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4 · {selectedProduct.name}</span><h3>Composez vos couleurs.</h3><p>De une à quatre, incluses dans le prix. La première domine, les suivantes l’accompagnent.</p></header>
+              {activeStep === 1 && <section className="choice-step"><header><span>Étape 2 sur 4 · {selectedProduct.name}</span><h3>Habillez chaque partie.</h3><p>Vingt coloris, disponibles sur les quatre zones. Une seule couleur partout, ou quatre : le prix ne bouge pas.</p></header>
+                <div className="zone-bar">
+                  <div className="zone-tabs" role="tablist" aria-label="Partie du sac à colorer">
+                    {bagZones.map((zone) => (
+                      <button type="button" key={zone.id} role="tab" aria-selected={activeZone === zone.id} className={activeZone === zone.id ? 'active' : ''} onClick={() => setActiveZone(zone.id)}>
+                        <YarnDot color={colorOf(zone.id)} size="sm" />
+                        <span><b>{zone.label}</b><small>{colorOf(zone.id).name}</small></span>
+                      </button>
+                    ))}
+                  </div>
+                  <button type="button" className="surprise-button" onClick={surpriseMe}><SparkIcon /> Surprenez-moi</button>
+                </div>
                 <div className="yarn-families">
                   {yarnFamilies.map((family) => (
                     <div className="yarn-family" key={family}>
                       <span>{family}</span>
                       <div className="yarn-row">
                         {yarnColors.filter((color) => color.family === family).map((color) => {
-                          const position = selectedColors.indexOf(color.id);
+                          const onZone = bagZones.filter((zone) => zones[zone.id] === color.id);
+                          const isActive = zones[activeZone] === color.id;
                           return (
-                            <button type="button" key={color.id} className={`yarn-choice ${position >= 0 ? 'selected' : ''}`} onClick={() => toggleColor(color)} aria-pressed={position >= 0} aria-label={position >= 0 ? `${color.name}, ${colorRoles[position]}` : `Ajouter ${color.name}`}>
-                              <span className="yarn-well"><YarnDot color={color} />{position >= 0 && <b>{position + 1}</b>}</span>
+                            <button type="button" key={color.id} className={`yarn-choice ${isActive ? 'selected' : ''} ${onZone.length && !isActive ? 'used' : ''}`} onClick={() => paintZone(color)} aria-pressed={isActive} aria-label={onZone.length ? `${color.name}, déjà sur ${onZone.map((zone) => zone.label.toLowerCase()).join(' et ')}` : `Appliquer ${color.name} sur ${bagZones.find((zone) => zone.id === activeZone).label.toLowerCase()}`}>
+                              <span className="yarn-well"><YarnDot color={color} />{onZone.length > 0 && <b>{onZone.length > 1 ? onZone.length : <CheckIcon />}</b>}</span>
                               <small>{color.name}</small>
                             </button>
                           );
@@ -732,26 +837,27 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="recipe">
-                  <div className="recipe-head"><span>Votre recette</span><b>{selectedColors.length}/4 couleurs · incluses</b></div>
-                  <div className="recipe-bar" role="img" aria-label={`Répartition : ${recipe.map((entry) => `${entry.color.name} ${entry.share}%`).join(', ')}`}>{recipe.map((entry) => <i key={entry.color.id} style={{ width: `${entry.share}%`, background: entry.color.hex }} />)}</div>
-                  <div className="recipe-chips">{recipe.map((entry) => (
-                    <button type="button" key={entry.color.id} onClick={() => removeColor(entry.color)} aria-label={`Retirer ${entry.color.name}, appliqué sur ${entry.role.toLowerCase()}`}>
-                      <YarnDot color={entry.color} size="sm" /><span><small>{entry.role}</small><b>{entry.color.name}</b></span><em aria-hidden="true">×</em>
+                  <div className="recipe-head"><span>{recipeName ? `Recette ${recipeName}` : 'Votre recette'}</span><b>{distinctColors.length} couleur{distinctColors.length > 1 ? 's' : ''} · incluses</b></div>
+                  <div className="recipe-bar" role="img" aria-label={bagZones.map((zone) => `${zone.label} ${colorOf(zone.id).name}`).join(', ')}>{bagZones.map((zone) => <i key={zone.id} style={{ width: '25%', background: colorOf(zone.id).hex }} />)}</div>
+                  <div className="recipe-chips">{bagZones.map((zone) => (
+                    <button type="button" key={zone.id} onClick={() => setActiveZone(zone.id)} className={activeZone === zone.id ? 'active' : ''} aria-label={`Modifier ${zone.label.toLowerCase()}, actuellement ${colorOf(zone.id).name}`}>
+                      <YarnDot color={colorOf(zone.id)} size="sm" /><span><small>{zone.label}</small><b>{colorOf(zone.id).name}</b></span>
                     </button>
                   ))}</div>
-                  <p className="recipe-note"><CheckIcon /> {selectedColors.length === 1 ? 'Une seule couleur : le sac est crocheté uni, anse comprise. Ajoutez-en pour habiller l’anse, la bande et le bord.' : `Chaque couleur habille sa zone : ${recipe.map((entry) => `${entry.role.toLowerCase()} en ${entry.color.name.toLowerCase()}`).join(', ')}.`}</p>
+                  <p className="recipe-note"><CheckIcon /> Sur demande, l’atelier vous envoie une photo de vos fils côte à côte avant de crocheter.</p>
                 </div>
               </section>}
 
-              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4 · {selectedProduct.name}</span><h3>Les finitions, si vous en voulez.</h3><p>Jusqu’à quatre, montrées sur votre composition. Le prix s’ajuste en direct.</p></header><div className="finish-counter"><span>{selectedFinishes.length}/4 finitions</span><b>{optionTotal ? `+${optionTotal} €` : 'Aucun supplément'}</b></div><div className="finish-cards" tabIndex={0} aria-label={`Finitions disponibles pour ${selectedProduct.name}`}>{availableFinishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); const Icon = finishIcons[finish.icon]; return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-preview"><BagPreview shapeId={selectedProduct.id} colors={recipeHex} finishes={[finish.id]} title={`${selectedProduct.name} avec ${finish.name.toLowerCase()}`} /></span><span className="finish-card-copy"><span className={`finish-chip chip-${finish.chip}`}><Icon /></span><b>{finish.name}</b><small>{finish.note}</small><strong>+{finish.price} €</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
+              {activeStep === 2 && <section className="choice-step"><header><span>Étape 3 sur 4 · {selectedProduct.name}</span><h3>Les finitions, si vous en voulez.</h3><p>Jusqu’à quatre, montrées sur votre composition. Le prix s’ajuste en direct.</p></header><div className="finish-counter"><span>{selectedFinishes.length}/4 finitions</span><b>{optionTotal ? `+${optionTotal} €` : 'Aucun supplément'}</b></div><div className="finish-cards" tabIndex={0} aria-label={`Finitions disponibles pour ${selectedProduct.name}`}>{availableFinishes.map((finish) => { const selected = selectedFinishes.includes(finish.id); const Icon = finishIcons[finish.icon]; return <button type="button" key={finish.id} className={selected ? 'selected' : ''} onClick={() => toggleFinish(finish)} aria-pressed={selected}><span className="finish-preview"><BagPreview shapeId={selectedProduct.id} zones={zones} finishes={[finish.id]} title={`${selectedProduct.name} avec ${finish.name.toLowerCase()}`} /></span><span className="finish-card-copy"><span className={`finish-chip chip-${finish.chip}`}><Icon /></span><b>{finish.name}</b><small>{finish.note}</small><strong>+{finish.price} €</strong></span><i>{selected ? <CheckIcon /> : '+'}</i></button>; })}</div></section>}
 
-              {activeStep === 3 && <section className="choice-step monogram-step"><header><span>Étape 4 sur 4 · {selectedProduct.name}</span><h3>Signez votre {selectedProduct.name}.</h3><p>Jusqu’à trois lettres gravées, toujours facultatives.</p></header><div className="monogram-layout"><div className="monogram-photo"><BagPreview shapeId={selectedProduct.id} colors={recipeHex} finishes={selectedFinishes} initials={initials} title={previewTitle} /></div><div className="monogram-control"><span className="gold-plaque">{initials || 'ML'}</span><label htmlFor="initials">Vos initiales <small>+8 €</small></label><div><input id="initials" value={initials} onChange={(event) => updateInitials(event.target.value)} placeholder="Ex. AL" maxLength={3} /><span>{initials.length}/3</span></div><p>Gravée sur la plaque dorée de votre {selectedProduct.name}. La taille finale est validée par l’atelier.</p></div></div></section>}
+              {activeStep === 3 && <section className="choice-step monogram-step"><header><span>Étape 4 sur 4 · {selectedProduct.name}</span><h3>Signez votre {selectedProduct.name}.</h3><p>Jusqu’à trois lettres gravées, toujours facultatives.</p></header><div className="monogram-layout"><div className="monogram-photo"><BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} /></div><div className="monogram-control"><span className="gold-plaque">{initials || 'ML'}</span><label htmlFor="initials">Vos initiales <small>+8 €</small></label><div><input id="initials" value={initials} onChange={(event) => updateInitials(event.target.value)} placeholder="Ex. AL" maxLength={3} /><span>{initials.length}/3</span></div><p>Gravée sur la plaque dorée de votre {selectedProduct.name}. La taille finale est validée par l’atelier.</p></div></div></section>}
             </div>
 
             <div className="config-footer">
-              <div className="config-recap"><span>Votre composition</span><p>{selectedProduct.name} · {selectedColors.length} couleur{selectedColors.length > 1 ? 's' : ''}{selectedDetails.length ? ` · ${selectedDetails.length} finition${selectedDetails.length > 1 ? 's' : ''}` : ''}{initials ? ` · ${initials}` : ''}</p></div>
+              <div className="config-recap"><span>Votre composition</span><p>{selectedProduct.name} · {distinctColors.length} couleur{distinctColors.length > 1 ? 's' : ''}{selectedDetails.length ? ` · ${selectedDetails.length} finition${selectedDetails.length > 1 ? 's' : ''}` : ''}{initials ? ` · ${initials}` : ''}</p></div>
               <div className="config-actions">{activeStep > 0 && <button type="button" className="back-button" onClick={() => setActiveStep((step) => step - 1)}><ArrowIcon direction="left" /> Retour</button>}<button type="button" className="button button-accent" onClick={(event) => activeStep < 3 ? setActiveStep((step) => step + 1) : addConfiguredBag(event.currentTarget)}>{activeStep < 3 ? `Continuer · ${steps[activeStep + 1]}` : 'Ajouter au panier'} <ArrowIcon /></button></div>
-              <div className="config-pay"><span>Prix final : <strong>{total} €</strong></span>{commerceReady ? <PaymentLogos /> : <small>Paiement Shopify activé à l’ouverture</small>}</div>
+              <div className="config-pay"><span>Prix final : <strong>{total} €</strong></span><button type="button" className="share-button" onClick={shareComposition} disabled={shareState === 'loading'}><ShareIcon /> {shareState === 'loading' ? 'Création…' : 'Voici mon MAYLUNE'}</button></div>
+              {commerceReady ? <div className="config-trust"><PaymentLogos /></div> : <small className="config-trust-note">Paiement Shopify activé à l’ouverture</small>}
             </div>
           </div>
         </div>
