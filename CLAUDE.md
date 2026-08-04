@@ -65,7 +65,7 @@ node tools/audit-couleurs.mjs <url>  # 20 coloris × 4 silhouettes = 80 combinai
 
 `audit-couleurs` mesure sur les **pixels rendus** (rastérisation du SVG dans un canvas), jamais sur les couleurs théoriques : le halo et le liseré ne sont pas dans le hex du fil. Il compare aussi les zones entre elles en distance perceptuelle Lab, parce que le ratio de luminance ment (lila sur rose bonbon = 1,05 et pourtant parfaitement distincts). À rejouer intégralement le jour où les calques photo remplacent l'illustration.
 
-Harnais navigateur : `verify-maylune.mjs` (scratchpad de session) — 15 contrôles × desktop/mobile : overflow, images, min 1/max 4 couleurs, exclusivité chaîne, prix 95 €, panier, FAQ, erreurs console. Utiliser playwright-core importé depuis `/Users/chabanmazen/mazbase/node_modules/playwright-core/index.mjs` et le binaire `~/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell` (jamais l’app Chrome for Testing fenêtrée). Captures : par viewport avec scroll progressif ; `scroll-behavior: smooth` décale les captures, scroller puis attendre.
+Harnais navigateur : `verify-maylune.mjs` (scratchpad de session), 15 contrôles × desktop/mobile. Utiliser playwright-core importé depuis `/Users/chabanmazen/mazbase/node_modules/playwright-core/index.mjs` et le binaire `~/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell` (jamais l’app Chrome for Testing fenêtrée). Captures : par viewport avec scroll progressif ; `scroll-behavior: smooth` décale les captures, scroller puis attendre.
 
 ## Déploiement GitHub Pages
 
@@ -90,7 +90,7 @@ EN LIGNE et vérifié sur la prod : parcours 30/30 desktop + mobile, 80 combinai
 Livré dans la journée : DA « Rose Atelier », audit par trois personas et ses correctifs (vraie Fraunces Italic, sticky mobile réparé, garde anti double-clic, initiales translittérées), 20 coloris, avis de l'atelier, section Joudy, moteur d'aperçu par zones, couleur par zone, 12 recettes composées, partage « Voici mon MAYLUNE », vue « À l'épaule » cotée, harnais des 80 combinaisons.
 
 Prochaine étape, dans l'ordre :
-1. **Calques photo** — commencer par UNE silhouette complète (Capri, 13 calques), brancher la bascule, juger sur les 20 coloris, corriger les prompts, puis produire les trois autres. Prompts prêts : `docs/PROMPTS-CODEX-SILHOUETTES.md`.
+1. **Calques photo** : commencer par UNE silhouette complète (Capri, 13 calques), brancher la bascule, juger sur les 20 coloris, corriger les prompts, puis produire les trois autres. Prompts prêts : `docs/PROMPTS-CODEX-SILHOUETTES.md`.
 2. **Chiffres de Joudy** : dimensions, matière, poids, longueur d'anse par silhouette → corrige `wornSetup` et débloque la fiche produit (onglet matière + schema.org Product).
 3. Photos de pelotes (`docs/IMAGES-CODEX.md`) pour remplacer les pastilles CSS.
 4. Socle Shopify, tarif de livraison, INPI/EUIPO classe 18, domaine, coûts et marges réels.
