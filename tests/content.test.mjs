@@ -18,11 +18,22 @@ test('le catalogue propose quatre signatures', () => {
 
 test('le nuancier libre 1 à 4 couleurs est en place', () => {
   // décision du 04/08/2026 : couleurs incluses (min 1, max 4), options matière payantes
-  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'La dominante', 'Quatre fils maximum', 'au moins une couleur']) {
+  // famille « Les froids » ajoutée le 04/08/2026 sur confirmation du stock (bleus + sauge)
+  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'Cobalt', 'Sauge', 'La dominante', 'Quatre fils maximum', 'au moins une couleur']) {
     assert.ok(page.includes(term), `nuancier incomplet : ${term}`);
   }
   const colorCount = (page.match(/family: 'Les /g) || []).length;
-  assert.equal(colorCount, 16, `le nuancier doit compter 16 coloris, trouvé ${colorCount}`);
+  assert.equal(colorCount, 20, `le nuancier doit compter 20 coloris, trouvé ${colorCount}`);
+});
+
+test('la preuve sociale et l’atelier de Joudy sont en place', () => {
+  // avis verbatim fournis par la cliente le 04/08/2026 ; les mentions site/service client ont été écartées
+  for (const term of ['Déjà portées', 'ventes directes de l’atelier', 'Lily A.', 'Inès D.', 'rating: 4', 'Joudy']) {
+    assert.ok(page.includes(term), `preuve sociale incomplète : ${term}`);
+  }
+  for (const forbidden of ['nouveau site', 'service client']) {
+    assert.ok(!page.includes(forbidden), `avis incompatible réintroduit : ${forbidden}`);
+  }
 });
 
 test('les options payantes sont présentes avec leurs prix', () => {

@@ -79,9 +79,13 @@ const yarnColors = [
   { id: 'aubergine', name: 'Aubergine', family: 'Les profonds', hex: '#5a3852', image: null },
   { id: 'lila', name: 'Lila', family: 'Les profonds', hex: '#b191ba', image: null },
   { id: 'violet', name: 'Violet', family: 'Les profonds', hex: '#67478c', image: null },
+  { id: 'ciel', name: 'Ciel', family: 'Les froids', hex: '#a9c3da', image: null },
+  { id: 'sauge', name: 'Sauge', family: 'Les froids', hex: '#a9bd8f', image: null },
+  { id: 'cobalt', name: 'Cobalt', family: 'Les froids', hex: '#2b56b6', image: null },
+  { id: 'marine', name: 'Marine', family: 'Les froids', hex: '#2a3a5c', image: null },
 ];
 
-const yarnFamilies = ['Les neutres', 'Les roses', 'Les solaires', 'Les profonds'];
+const yarnFamilies = ['Les neutres', 'Les roses', 'Les solaires', 'Les profonds', 'Les froids'];
 const colorRoles = ['La dominante', 'La compagne', 'L’accent', 'La touche'];
 const recipeShares = { 1: [100], 2: [62, 38], 3: [55, 28, 17], 4: [48, 26, 16, 10] };
 
@@ -116,6 +120,10 @@ const faqs = [
     a: 'La forme, votre recette de une à quatre couleurs, les finitions compatibles avec le modèle (chaîne, franges, fil métallisé, poche) et une plaque de trois initiales. Le prix se met à jour à chaque choix.',
   },
   {
+    q: 'Qui crochète mon sac ?',
+    a: 'Joudy, dans son atelier installé chez elle, avec les fils et le matériel qu’elle a choisis. Chaque pièce est crochetée à la commande, d’une seule paire de mains, puis contrôlée avant la mise en écrin.',
+  },
+  {
     q: 'Le sac garde-t-il sa forme ?',
     a: 'Le fil et le point sont choisis pour donner de la tenue sans rigidité. La doublure et les finitions renforcent les zones les plus sollicitées.',
   },
@@ -127,6 +135,17 @@ const faqs = [
     q: 'Comment entretenir le crochet ?',
     a: 'Nettoyez localement avec un linge humide et un savon doux, sans frotter. Séchage à plat, loin d’une source de chaleur. Ni machine ni sèche-linge.',
   },
+];
+
+// Avis verbatim des ventes directes de l'atelier (fournis par la cliente le 04/08/2026).
+// Écartés volontairement : les témoignages citant des services que la marque n'a pas encore (voir content.test.mjs).
+const reviews = [
+  { name: 'Lily A.', rating: 5, text: 'J’ai commandé un sac pour ma fille et franchement je suis ravie. Il est encore plus beau en vrai, la qualité est au rendez-vous et les finitions sont super propres. Je recommande sans hésiter !' },
+  { name: 'Sarah M.', rating: 5, text: 'Franchement je suis super contente de mon achat ! Le sac est magnifique, les finitions sont très propres et la couleur est encore plus belle en vrai. Ma fille l’adore et ne le quitte plus.' },
+  { name: 'Inès D.', rating: 4, text: 'Le sac est vraiment superbe et correspond exactement aux photos. J’ai juste trouvé le délai de livraison un peu plus long que prévu, mais ça valait largement l’attente.' },
+  { name: 'Camille R.', rating: 5, text: 'Très belle surprise ! Le sac est solide, léger et vraiment adorable. Les photos sont fidèles au produit reçu. Je vais sûrement en reprendre un dans une autre couleur.' },
+  { name: 'Sofia A.', rating: 5, text: 'Commande reçue rapidement, emballage soigné et produit impeccable. On voit que c’est fait avec soin. Je suis vraiment satisfaite de mon achat.' },
+  { name: 'Manon G.', rating: 5, text: 'J’ai pris le modèle rose et il est encore plus joli que sur les photos. Les coutures sont bien faites et le sac fait vraiment son petit effet.' },
 ];
 
 const steps = ['La forme', 'Les couleurs', 'Les finitions', 'La plaque'];
@@ -153,6 +172,10 @@ function CloseIcon() {
 
 function CheckIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>;
+}
+
+function StarIcon({ off = false }) {
+  return <svg className={`star ${off ? 'off' : ''}`} viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4l2.7 5.4 6 .9-4.3 4.2 1 5.9-5.4-2.8-5.4 2.8 1-5.9L3.3 9.7l6-.9z" /></svg>;
 }
 
 function ChainIcon() {
@@ -579,9 +602,20 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="reviews section" id="avis">
+        <div className="section-heading reveal"><div><p className="eyebrow">03 · Elles ont commandé</p><h2>Déjà portées, <em>déjà adorées.</em></h2></div><p>Avis recueillis lors des ventes directes de l’atelier, avant l’ouverture du site.</p></div>
+        <div className="review-grid" tabIndex={0} aria-label="Avis des clientes de l’atelier">{reviews.map((review) => (
+          <figure className="review-card reveal" key={review.name}>
+            <div className="review-stars" role="img" aria-label={`${review.rating} étoiles sur 5`}>{[1, 2, 3, 4, 5].map((position) => <StarIcon key={position} off={position > review.rating} />)}</div>
+            <blockquote>{review.text}</blockquote>
+            <figcaption>{review.name}</figcaption>
+          </figure>
+        ))}</div>
+      </section>
+
       <section className="craft" id="savoir-faire">
-        <div className="craft-image reveal"><Image src="/images/atelier.webp" alt="Artisane crochetant un sac MAYLUNE" fill sizes="(max-width: 800px) 100vw, 50vw" /><div><span>Le geste MAYLUNE</span><strong>Maille après maille</strong></div></div>
-        <div className="craft-copy reveal"><p className="eyebrow">Fait à la commande</p><h2>Votre recette lance le geste.</h2><p className="craft-lead">Rien n’est crocheté d’avance. Vos choix deviennent une fiche d’atelier, puis une seule pièce : la vôtre.</p><ol><li><span>01</span><div><h3>La recette est vérifiée</h3><p>Forme, couleurs et finitions réunies sur une fiche d’atelier.</p></div></li><li><span>02</span><div><h3>Le sac prend forme</h3><p>Corps, anses et doublure assemblés puis contrôlés.</p></div></li><li><span>03</span><div><h3>Les finitions sont posées</h3><p>Plaque, chaîne et poche vérifiées avant la mise en écrin.</p></div></li></ol><div className="craft-fact"><strong>7–12 jours</strong><span>Estimation de confection avant expédition</span></div></div>
+        <div className="craft-image reveal"><Image src="/images/atelier.webp" alt="Joudy crochetant un sac MAYLUNE dans son atelier" fill sizes="(max-width: 800px) 100vw, 50vw" /><div><span>L’atelier de Joudy</span><strong>Maille après maille</strong></div></div>
+        <div className="craft-copy reveal"><p className="eyebrow">Fait à la commande</p><h2>Crocheté par <em>Joudy.</em></h2><p className="craft-lead">Un petit atelier installé à la maison, les pelotes à portée de main, une seule pièce à la fois. Votre recette lance le geste.</p><ol><li><span>01</span><div><h3>La recette est vérifiée</h3><p>Forme, couleurs et finitions réunies sur une fiche d’atelier.</p></div></li><li><span>02</span><div><h3>Le sac prend forme</h3><p>Corps, anses et doublure assemblés puis contrôlés.</p></div></li><li><span>03</span><div><h3>Les finitions sont posées</h3><p>Plaque, chaîne et poche vérifiées avant la mise en écrin.</p></div></li></ol><div className="craft-fact"><strong>7–12 jours</strong><span>Estimation de confection avant expédition</span></div></div>
       </section>
 
       <section className="ritual section">

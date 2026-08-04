@@ -28,6 +28,12 @@ Prompt modèle (remplacer nom + hex) :
 | aubergine | Aubergine | #5a3852 |
 | lila | Lila | #b191ba |
 | violet | Violet | #67478c |
+| ciel | Ciel | #a9c3da |
+| sauge | Sauge | #a9bd8f |
+| cobalt | Cobalt | #2b56b6 |
+| marine | Marine | #2a3a5c |
+
+(20 coloris depuis le 04/08 : famille « Les froids » confirmée par la cliente.)
 
 Les pastilles sont affichées en cercle : centrer la pelote, marges perdues acceptées.
 
@@ -35,6 +41,17 @@ Les pastilles sont affichées en cercle : centrer la pelote, marges perdues acce
 
 `public/images/finish-{chaine-or,chaine-argent,franges,fil-dore,fil-argent,poche}.webp`, carré 400×400 : macro du détail posé sur crochet, même fond #f7e9e7, même lumière.
 
-## 3. Ambiances (optionnel, quand la DA rose doit gagner les photos)
+## 3. L'atelier de Joudy (priorité 2, remplace `atelier.webp`)
+
+La section savoir-faire est maintenant signée « Crocheté par Joudy » : la photo doit montrer SON univers, pas un atelier générique.
+
+Fichier : `public/images/atelier.webp` (remplacement, portrait ~4:5, < 300 Ko).
+Prompt :
+> Photo éditoriale d'un petit atelier de crochet installé dans une maison lumineuse : table en bois clair, paniers de pelotes de fil t-shirt yarn dans des tons rose poudré, framboise, bordeaux, moutarde et ivoire, mains féminines en train de crocheter un sac framboise au premier plan, crochet doré, lumière naturelle douce de fin de matinée par une fenêtre, ambiance chaleureuse et soignée, aucun visage visible, aucun texte, style premium artisanal.
+
+Optionnel : `public/images/atelier-detail.webp` (carré) :
+> Macro des mains crochetant une maille serrée de fil framboise, crochet métallique doré, pelote floue en arrière-plan sur fond rose poudré, lumière naturelle, aucun texte.
+
+## 4. Ambiances (optionnel, quand la DA rose doit gagner les photos)
 
 Les visuels produits actuels restent valables (les couleurs vivent dans les produits). Si refresh souhaité : hero porté avec sac framboise/rose poudré, campagne 3 sacs aux recettes contrastées, atelier avec pelotes roses au premier plan. Formats et noms actuels conservés (`hero-maylune.webp`, `campaign.webp`, `atelier.webp`).
