@@ -10,39 +10,44 @@ Prototype e-commerce Next.js d’une marque premium de sacs crochetés personnal
 - Métadonnées : `src/app/layout.js`
 - Visuels servis : `public/images/` (WebP uniquement)
 - Masters haute définition : `assets/source-images/`
-- Logos de paiement : `public/payments/`
+- Plan d’images à générer : `docs/IMAGES-CODEX.md`
 
-## Direction verrouillée
+## Direction verrouillée · DA « Rose Atelier » (04/08/2026)
 
 - Marque : MAYLUNE, toujours en capitales.
-- Palette d’interface : ivoire dominant, brun encre, corail d’action, or discret. Les autres couleurs restent dans les produits.
-- Typographie : Fraunces embarquée pour l’éditorial, Manrope embarquée pour l’interface.
-- Ton : français précis, désirable et concret. Éviter les clichés génériques du luxe.
-- Parcours : silhouette → palette → détails → plaque, avec aperçu et prix en direct.
-- Continuité visuelle obligatoire : les 4 palettes, les finitions, la plaque et le panier doivent toujours conserver la silhouette choisie.
-- Mobile : aperçu configurateur compact et sticky ; le CTA du hero doit ouvrir directement `#config-start`.
-- Configurateur desktop : un seul aperçu plein cadre. Ne pas réintroduire de vignette photo flottante par-dessus le produit ; l’état actif est nommé dans le bandeau inférieur.
-- Tant que Shopify n’est pas configuré, ne jamais afficher un faux paiement ou une fausse commande réussie.
+- Palette d’interface : fond rose poudré `#f7e9e7`, surfaces crème rosée, encre prune `#38161f`, action framboise `#b62d53`, prune vin `#5a1f31` pour les sections sombres, or `#8b6132`. Jamais de rose bonbon en aplat plein écran : les roses se superposent. Contrastes AA vérifiés au calcul (min 4,55).
+- Coins adoucis (cartes 16px, puces 12px, CTA en pilule) : le crochet est rond.
+- Typographie : Fraunces embarquée (axe SOFT 55 sur les titres) + Manrope embarquée. Zéro tiret cadratin dans les livrables (`grep -rn '—' src tests` doit rendre 0).
+- Ton : français précis, désirable, concret. Peu de texte : les visuels portent.
+- Parcours : silhouette → couleurs → finitions → plaque, prix en direct.
+- Configurateur desktop : un seul aperçu plein cadre, pas de vignette flottante ; la recette est visible via la barre latérale de couleurs et le bandeau inférieur.
+- Tant que Shopify n’est pas configuré : jamais de faux paiement ni de fausse commande.
+
+## Décisions commerciales actées (04/08/2026, benchmark Cushy Lab + 20.due)
+
+- **Couleurs offertes, matière payante** : recette de 1 à 4 couleurs incluses dans le prix (16 coloris, 4 familles, rôles Dominante/Compagne/Accent/Touche). Options payantes : chaîne dorée ou argentée +10 € (exclusives), franges +5 €, fil métallisé doré ou argenté +3 € (exclusifs), poche zippée +8 €, plaque initiales +8 €.
+- **Grille de prix sous les seuils** : Mini Muse 49 · Rosalie 59 · Capri 69 · Colette 99. Livraison offerte dès 79 €.
+- Pas de faux rendu couleur : l’aperçu montre la silhouette + la recette (barre proportionnelle) ; l’atelier confirme par photo des fils avant confection.
+- Duos/bundles toujours retirés (03/08) et palettes fixes retirées (04/08) : ne pas les réintroduire sans ordre. `tests/content.test.mjs` verrouille tout ça.
+- ⏳ À confirmer par la cliente : faisabilité atelier des franges et du fil métallisé.
 
 ## Activation Shopify
 
-Le connecteur Storefront API est dans `src/lib/shopify.js`. Le checkout ne s’active que lorsque le domaine, le token Storefront et toutes les variantes produits/options sont fournis via les variables `NEXT_PUBLIC_SHOPIFY_*` documentées dans ce fichier.
+Connecteur Storefront : `src/lib/shopify.js`. Variables : `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN`, variantes produits (`…_VARIANT_ROSALIE/CAPRI/COLETTE/MINI_MUSE`) et options (`…_VARIANT_CHAINE_OR/CHAINE_ARGENT/FRANGES/FIL_DORE/FIL_ARGENT/POCHE/INITIALS`). Le checkout reste dormant tant que tout n’est pas fourni.
 
 ## Vérification
 
 ```bash
-npm run lint
-npm test
-npm run build
+npm run lint && npm test && npm run build
 ```
 
-Serveur local habituel : `http://127.0.0.1:3333`.
+Harnais navigateur : `verify-maylune.mjs` (scratchpad de session) — 15 contrôles × desktop/mobile : overflow, images, min 1/max 4 couleurs, exclusivité chaîne, prix 95 €, panier, FAQ, erreurs console. Utiliser playwright-core importé depuis `/Users/chabanmazen/mazbase/node_modules/playwright-core/index.mjs` et le binaire `~/Library/Caches/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-mac-arm64/chrome-headless-shell` (jamais l’app Chrome for Testing fenêtrée). Captures : par viewport avec scroll progressif ; `scroll-behavior: smooth` décale les captures, scroller puis attendre.
 
 ## Déploiement GitHub Pages
 
 - Repo : `https://github.com/mazen-create11/maylune-store` (main = source, gh-pages = build)
 - URL live : `https://mazen-create11.github.io/maylune-store/`
-- Piège payé : en export statique, next/image ne préfixe pas `basePath` sur les src → `image-loader.js` (custom loader) est obligatoire, ne pas le supprimer.
+- Piège payé : en export statique, next/image ne préfixe pas `basePath` → `image-loader.js` obligatoire. Vérifier `grep '/maylune-store/_next' out/index.html` avant push.
 
 ```bash
 GITHUB_PAGES=1 npx next build
@@ -52,22 +57,8 @@ cd out && git init -b gh-pages -q && git add -A && git commit -q -m "deploy" \
 cd .. && rm -rf out/.git
 ```
 
-## État au 3 août 2026
+Après push : rejouer le harnais sur l’URL live (un 200 ne prouve rien). Le marqueur fiable est le `<title>` : les étapes 2-4 du configurateur ne sont pas dans le HTML pré-rendu.
 
-EN LIGNE : https://mazen-create11.github.io/maylune-store/ — lint, 3 tests, build statique et audit navigateur desktop/mobile validés (16 aperçus, panier persistant, 0 overflow, 0 image cassée, 0 erreur JS, 0 violation WCAG A/AA automatisée).
+## État au 4 août 2026
 
-Décisions actées du 03/08 :
-- **Duos/bundles retirés** sur ordre de Mazen — le test `content.test.mjs` interdit leur retour sans nouvel ordre.
-- **Grille prix v2 alignée sous marché** (benchmark ELOOP/Laïli/Reka/LelouPassion/adèle.d) : Rosalie 59 € · Capri 74 € · Colette 109 € · Mini Muse 55 € · chaîne 8 € · poche 10 € · initiales 8 € · livraison offerte dès 79 €. Les concurrents incluent les options gratuitement : nos options payantes basses sont une différenciation assumée.
-- Panneau composition = « étiquette d'atelier » (filet or, prix décomposé base + options) ; stepper à coches or ; configurateur mobile à une seule image (aperçu détail masqué ≤900px).
-- Micro-typographie remontée (minimum 9px, courant 10-12px) — ne pas redescendre.
-- Configurateur complet : matrice 4 silhouettes × 4 palettes, finitions propres à chaque modèle et plaque d'initiales positionnée sur le sac choisi. Toute nouvelle silhouette doit fournir cette matrice avant publication.
-- Les images servies au navigateur sont en WebP ; les PNG haute définition du configurateur restent des masters locaux ignorés par Git.
-- Fraunces remplace le fallback Bodoni non embarqué ; sitemap, robots, canonical GitHub Pages et page d’informations légales sont présents.
-- Newsletter, liens sociaux, suivi de commande et moyens de paiement trompeurs ont été retirés tant que les services réels ne sont pas connectés.
-- Le panier est persisté dans `localStorage`; le checkout Shopify conserve modèle, palette, finitions, initiales et identifiant de composition.
-- Le paquet public est passé d’environ 64 Mo à 8,6 Mo en déplaçant les PNG masters hors de `public/`.
-
-Vérification navigateur : harnais `verify-maylune.mjs` dans le scratchpad de session — utiliser le **headless shell** Playwright (`chromium_headless_shell-1208`), jamais l'app Chrome for Testing fenêtrée (dialogues de crash macOS chez Mazen).
-
-Avant commercialisation, valider les coûts et marges, les délais réels, les mentions légales, la disponibilité INPI/EUIPO de MAYLUNE et le nom de domaine.
+EN LIGNE : refonte « Rose Atelier » déployée et vérifiée live (30/30 contrôles desktop + mobile). Lint, 6 tests, build statique OK. Reste : photos de pelotes (voir `docs/IMAGES-CODEX.md`, câblage `image:` dans `yarnColors`), retour cliente sur franges/fil métallisé, puis socle Shopify, INPI/EUIPO classe 18, domaine, coûts/marges réels.
