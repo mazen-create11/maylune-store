@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://mazen-create11.github.io/maylune-store/sitemap.xml
