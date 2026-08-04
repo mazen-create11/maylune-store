@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Informations légales — MAYLUNE',
+  title: 'Informations légales · MAYLUNE',
   description: 'Informations sur le site de présentation MAYLUNE et son ouverture commerciale.',
   alternates: { canonical: './informations-legales/' },
 };

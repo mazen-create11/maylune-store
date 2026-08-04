@@ -10,8 +10,12 @@ const variants = {
     'mini-muse': process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_MINI_MUSE,
   },
   options: {
-    chain: process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_CHAIN,
-    pocket: process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_POCKET,
+    'chaine-or': process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_CHAINE_OR,
+    'chaine-argent': process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_CHAINE_ARGENT,
+    franges: process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_FRANGES,
+    'fil-dore': process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_FIL_DORE,
+    'fil-argent': process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_FIL_ARGENT,
+    poche: process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_POCHE,
     initials: process.env.NEXT_PUBLIC_SHOPIFY_VARIANT_INITIALS,
   },
 };
@@ -27,7 +31,7 @@ function configurationAttributes(item) {
   return [
     { key: 'Composition', value: item.configurationId },
     { key: 'Modèle', value: item.productName },
-    { key: 'Palette', value: item.paletteName },
+    { key: 'Couleurs', value: item.paletteName },
     { key: 'Finitions', value: item.finishNames.join(', ') },
     ...(item.initials ? [{ key: 'Initiales', value: item.initials }] : []),
   ];
@@ -40,7 +44,7 @@ function cartLines(items) {
     if (!baseVariant) throw new Error(`La variante Shopify de ${item.productName} manque.`);
 
     const lines = [{ merchandiseId: baseVariant, quantity: 1, attributes }];
-    for (const optionId of item.finishIds.filter((id) => id !== 'braid')) {
+    for (const optionId of item.finishIds) {
       const optionVariant = variants.options[optionId];
       if (!optionVariant) throw new Error(`La variante Shopify de l’option ${optionId} manque.`);
       lines.push({

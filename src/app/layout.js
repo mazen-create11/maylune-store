@@ -18,13 +18,13 @@ const manrope = localFont({
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'MAYLUNE — Le sac que vous composez, crocheté à la commande',
+  title: 'MAYLUNE · Vos couleurs, votre sac crocheté à la commande',
   description:
-    'Choisissez la forme, l’accord de couleurs et les détails de votre sac MAYLUNE. Votre composition est crochetée à la commande en 7 à 12 jours.',
+    'Composez votre sac au crochet : une forme, 1 à 4 couleurs parmi 16 coloris, vos initiales. Crocheté à la commande en 7 à 12 jours, dès 49 €.',
   alternates: { canonical: './' },
   openGraph: {
-    title: 'MAYLUNE — Personne ne l’aura choisi à votre place',
-    description: 'Quatre formes, quatre accords signature et des détails utiles à choisir pas à pas.',
+    title: 'MAYLUNE · Vos couleurs, votre sac',
+    description: 'Une forme, jusqu’à quatre couleurs, vos initiales. Crocheté à la commande dès 49 €.',
     url: './',
     siteName: 'MAYLUNE',
     locale: 'fr_FR',
@@ -33,8 +33,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MAYLUNE — Votre style mérite mieux qu’un sac déjà vu',
-    description: 'Composez votre forme, votre accord de couleurs et vos détails.',
+    title: 'MAYLUNE · Vos couleurs, votre sac',
+    description: 'Composez la forme, la recette de couleurs et les finitions. Crocheté à la commande.',
     images: ['/images/campaign.webp'],
   },
   robots: { index: true, follow: true },
