@@ -19,11 +19,26 @@ test('le catalogue propose quatre signatures', () => {
 test('le nuancier libre 1 à 4 couleurs est en place', () => {
   // décision du 04/08/2026 : couleurs incluses (min 1, max 4), options matière payantes
   // famille « Les froids » ajoutée le 04/08/2026 sur confirmation du stock (bleus + sauge)
-  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'Cobalt', 'Sauge', 'La dominante', 'Quatre fils maximum', 'au moins une couleur']) {
+  for (const term of ['Rose poudré', 'Fuchsia', 'Bordeaux', 'Moutarde', 'Cobalt', 'Sauge', 'Le corps', 'Quatre fils maximum', 'au moins une couleur']) {
     assert.ok(page.includes(term), `nuancier incomplet : ${term}`);
   }
   const colorCount = (page.match(/family: 'Les /g) || []).length;
   assert.equal(colorCount, 20, `le nuancier doit compter 20 coloris, trouvé ${colorCount}`);
+});
+
+test('l’aperçu réagit à la composition (moteur par zones)', () => {
+  // décision du 04/08/2026 : l'aperçu doit refléter couleurs, finitions et initiales, pas une photo figée
+  for (const shape of ['rosalie:', 'capri:', 'colette:', "'mini-muse':"]) {
+    assert.ok(page.includes(shape), `silhouette absente du moteur d’aperçu : ${shape}`);
+  }
+  for (const term of ['bagShapes', 'BagPreview', 'zoneColor', 'data-finish="franges"', 'data-plaque-text', 'Quatre finitions maximum']) {
+    assert.ok(page.includes(term), `moteur d’aperçu incomplet : ${term}`);
+  }
+  // chaque silhouette expose les 4 zones colorables et ses ancrages
+  const shapeBlock = page.slice(page.indexOf('const bagShapes'), page.indexOf('const chainMetals'));
+  for (const key of ['handle', 'parts', 'chain', 'fringe', 'plaque']) {
+    assert.equal((shapeBlock.match(new RegExp(`${key}:`, 'g')) || []).length, 4, `chaque silhouette doit définir ${key}`);
+  }
 });
 
 test('la preuve sociale et l’atelier de Joudy sont en place', () => {
