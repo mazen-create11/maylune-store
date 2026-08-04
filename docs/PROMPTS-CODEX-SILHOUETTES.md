@@ -48,6 +48,10 @@ Nommer exactement : `public/images/silhouettes/<slug>-<calque>.png`
 | `fringe` | les franges SEULES, en fil blanc neutre, sous le sac | teinté par « Le corps » |
 | `pocket` | le zip et sa tirette dorée SEULS, à l'intérieur du haut du sac | finition poche |
 | `plaque` | la plaque ovale dorée VIDE, sans lettres | les initiales sont écrites par-dessus |
+| `worn-body` | le sac PORTÉ à l'épaule, corps seul, fil blanc neutre | vue « à l'épaule », teintée comme `body` |
+| `worn-handle` | l'anse seule sur la même photo portée | teintée comme `handle` |
+| `worn-model` | le mannequin SANS le sac (buste, épaule, bras, tenue neutre) | fond de la vue portée, jamais teinté |
+| `worn-shade` | ombres et lumières du sac porté, noir et blanc | relief de la vue portée |
 
 ## Prompts prêts à copier
 
@@ -77,7 +81,23 @@ Remplacer {LA PARTIE} par : « le corps du sac, sans anse ni bande ni liseré du
 
 > À partir de la référence, ajoute une fermeture éclair fine avec tirette dorée à l'intérieur du haut du sac, puis ne conserve QUE la fermeture et sa tirette. Le reste est absent, fond transparent, même cadrage.
 
-### 7. Plaque
+### 7. Vue portée (le calque qui répond à « ça fait quelle taille ? »)
+
+C'est la question numéro un sur un sac, et ni Cushy Lab ni 20.due n'y répondent. Même principe que la vue produit : le sac se teinte, le mannequin non.
+
+Étape 1, la référence portée :
+> Photo mode d'une femme portant à l'épaule un sac au crochet en fil de coton **blanc cassé neutre**, {DESCRIPTION DE LA SILHOUETTE}, cadrage du haut des cuisses jusqu'au menton, visage hors champ, tenue unie très sobre couleur écru, fond studio uni beige rosé, lumière naturelle douce, le sac parfaitement net et de profil trois quarts, style éditorial premium, format carré.
+
+Étape 2, les découpes (répéter comme pour la vue produit) :
+> À partir de cette image portée, même cadrage, même échelle, même lumière : ne conserve QUE {le corps du sac / l'anse et la bandoulière}. Le reste est absent, fond transparent, fil blanc cassé neutre.
+
+Étape 3, le mannequin seul :
+> À partir de cette image portée, retire complètement le sac et sa bandoulière, conserve la femme, sa tenue et le fond, reconstitue proprement l'épaule et le bras là où le sac se trouvait. Même cadrage, même lumière.
+
+Étape 4, les ombres portées :
+> À partir de l'image portée, produis uniquement la carte d'ombres et de lumières du sac : noir et blanc, fond transparent, inclure l'ombre que le sac projette sur la tenue.
+
+### 8. Plaque
 
 > Plaque ovale en métal doré brossé, vide, sans aucune inscription ni lettre, vue de face, léger relief, fond transparent, éclairage doux, rendu photo réaliste.
 

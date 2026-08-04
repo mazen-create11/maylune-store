@@ -118,10 +118,69 @@ const bagShapes = {
   },
 };
 
+// Vue portée : le sac est redessiné à l'échelle réelle sur une silhouette humaine (168 cm de référence).
+// Chaque silhouette déclare sa hauteur réelle en cm, son échelle et son ancrage sur le corps.
+// Échelles calculées : corps de 168 cm dessiné sur 418 unités, soit 2,49 unités/cm.
+// scale = (hauteur réelle du sac × 2,49) / hauteur du tracé de la silhouette.
+const wornSetup = {
+  rosalie: { height: 16, width: 21, drop: 'Porté main ou croisé', scale: 0.28, x: 246, y: 250 },
+  capri: { height: 22, width: 30, drop: 'Porté épaule', scale: 0.36, x: 246, y: 258 },
+  colette: { height: 30, width: 36, drop: 'Porté épaule', scale: 0.47, x: 242, y: 268 },
+  'mini-muse': { height: 15, width: 22, drop: 'Porté épaule', scale: 0.39, x: 245, y: 248 },
+};
+
 const chainMetals = {
   'chaine-or': ['#c39a3f', '#ecd9a0'],
   'chaine-argent': ['#9aa0ab', '#e2e5ea'],
 };
+
+// Croquis d'atelier : la femme est tracée au trait, le sac reste la seule masse colorée.
+// Quand les calques photo portés arriveront, ce composant bascule sur les images (docs/PROMPTS-CODEX-SILHOUETTES.md).
+function WornPreview({ shapeId, zones, finishes = [], title }) {
+  const setup = wornSetup[shapeId];
+  const shape = bagShapes[shapeId];
+  const zoneColor = (id) => yarnColors.find((color) => color.id === zones[id])?.hex || '#ecc4cd';
+  const chainId = finishes.find((id) => id === 'chaine-or' || id === 'chaine-argent');
+  const line = 'rgba(247,233,231,.5)';
+  const bagTop = setup.y - (setup.height * 2.49) / 2;
+  const bagBottom = setup.y + (setup.height * 2.49) / 2;
+  return (
+    <svg viewBox="0 0 400 470" role="img" aria-label={title}>
+      <g fill="none" stroke={line} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M176,72 C176,44 190,30 200,30 C210,30 224,44 224,72 C224,92 212,104 200,104 C188,104 176,92 176,72 Z" />
+        <path d="M192,104 v16" /><path d="M208,104 v16" />
+        <path d="M158,140 C168,126 184,120 200,120 C216,120 232,126 242,140" />
+        <path d="M158,140 C146,168 142,214 144,262 C146,306 150,352 152,392 C153,420 156,436 158,448" />
+        <path d="M242,140 C254,168 258,214 256,262 C254,306 250,352 248,392 C247,420 244,436 242,448" />
+        <path d="M162,146 C150,182 146,232 148,286" opacity=".55" />
+        <path d="M238,146 C250,182 254,232 252,286" opacity=".55" />
+        <path d="M152,392 C176,398 224,398 248,392" />
+        <path d="M200,392 v56" opacity=".5" />
+      </g>
+      {/* bandoulière : de l'épaule au sac */}
+      <path d={`M232,138 C240,178 244,${bagTop - 40} ${setup.x - 4},${bagTop + 6}`} fill="none" stroke={chainId ? chainMetals[chainId][0] : zoneColor('handle')} strokeWidth={chainId ? 4 : 7} strokeLinecap="round" strokeDasharray={chainId ? '6 4.5' : undefined} />
+      {/* le sac, à l'échelle réelle du corps */}
+      <g transform={`translate(${setup.x},${setup.y}) scale(${setup.scale}) translate(-200,-235)`}>
+        {shape.parts.map((part, index) => (
+          <g key={index}>
+            <path d={part.d} fill={zoneColor(part.zone)} />
+            <path d={part.d} fill="none" stroke="rgba(36,14,21,.3)" strokeWidth="2.4" />
+          </g>
+        ))}
+        <ellipse cx={shape.plaque[0]} cy={shape.plaque[1]} rx="34" ry="14" fill="#d9b45e" stroke="#9f7028" strokeWidth="1.6" />
+      </g>
+      {/* cotes */}
+      <g stroke="rgba(247,233,231,.34)" strokeWidth="1.3" fill="none">
+        <path d="M96,30 h-14 M96,448 h-14 M89,30 v418" />
+        <path d={`M330,${bagTop} h14 M330,${bagBottom} h14 M337,${bagTop} v${bagBottom - bagTop}`} stroke="#ddb287" />
+      </g>
+      <text x="76" y="244" fill="rgba(247,233,231,.62)" stroke="none" textAnchor="middle" transform="rotate(-90 76 244)" style={{ fontFamily: 'var(--body)', fontSize: 11, fontWeight: 650, letterSpacing: '.12em' }}>168 CM</text>
+      <text x="352" y={setup.y - 2} fill="#ddb287" stroke="none" style={{ fontFamily: 'var(--body)', fontSize: 13, fontWeight: 700 }}>{setup.height} cm</text>
+      <text x="352" y={setup.y + 14} fill="rgba(247,233,231,.55)" stroke="none" style={{ fontFamily: 'var(--body)', fontSize: 11 }}>× {setup.width} cm</text>
+      <text x="200" y="466" fill="rgba(247,233,231,.5)" stroke="none" textAnchor="middle" style={{ fontFamily: 'var(--body)', fontSize: 10, fontWeight: 650, letterSpacing: '.14em' }}>{setup.drop.toUpperCase()}</text>
+    </svg>
+  );
+}
 
 function BagPreview({ shapeId, zones, finishes = [], initials = '', title }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
@@ -153,7 +212,14 @@ function BagPreview({ shapeId, zones, finishes = [], initials = '', title }) {
         <pattern id={`${uid}fil`} width="9" height="9" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
           <line x1="1" y1="0" x2="1" y2="9" stroke={filId === 'fil-dore' ? '#d9b25e' : '#c3c9d3'} strokeWidth="1.5" />
         </pattern>
+        {/* halo : détache les fils sombres (bordeaux, marine, aubergine) de la scène prune */}
+        <radialGradient id={`${uid}halo`} cx="50%" cy="46%" r="52%">
+          <stop offset="0" stopColor="#f7e9e7" stopOpacity=".2" />
+          <stop offset=".62" stopColor="#f7e9e7" stopOpacity=".07" />
+          <stop offset="1" stopColor="#f7e9e7" stopOpacity="0" />
+        </radialGradient>
       </defs>
+      <rect x="34" y="18" width="332" height="334" fill={`url(#${uid}halo)`} />
       <ellipse cx="200" cy="330" rx="128" ry="14" fill="#38161f" opacity=".1" />
       {handles.map((handle, index) => (
         <g key={index} data-zone="handle" data-finish={longHandle ? 'anses' : undefined}>
@@ -176,7 +242,9 @@ function BagPreview({ shapeId, zones, finishes = [], initials = '', title }) {
         </g>
       ))}
       {filId && <path d={bodyPath} fill={`url(#${uid}fil)`} opacity=".5" data-finish="fil" />}
-      <path d={bodyPath} fill="none" stroke="rgba(56,22,31,.2)" strokeWidth="1.6" />
+      {/* liseré clair : détache le sac de la scène quelle que soit la teinte, même marine ou bordeaux */}
+      <path d={bodyPath} fill="none" stroke="rgba(247,233,231,.42)" strokeWidth="3.4" />
+      <path d={bodyPath} fill="none" stroke="rgba(56,22,31,.22)" strokeWidth="1.6" />
       {hasPocket && (
         <g data-finish="poche">
           <line x1={shape.pocket.x1} y1={shape.pocket.y} x2={shape.pocket.x2} y2={shape.pocket.y} stroke="rgba(56,22,31,.35)" strokeWidth="2.6" strokeLinecap="round" />
@@ -195,7 +263,10 @@ function BagPreview({ shapeId, zones, finishes = [], initials = '', title }) {
         </g>
       )}
       <g transform={`translate(${shape.plaque[0]},${shape.plaque[1]})`}>
-        <ellipse rx="36" ry="14.5" fill={`url(#${uid}gold)`} stroke="#9f7028" strokeWidth="1" />
+        {/* halo clair puis contour foncé : lisible autant sur un fil nude que sur du marine */}
+        <ellipse rx="39" ry="17.4" fill="none" stroke="rgba(255,255,255,.5)" strokeWidth="3" />
+        <ellipse rx="37.6" ry="16" fill="none" stroke="rgba(36,14,21,.5)" strokeWidth="2.4" />
+        <ellipse rx="36" ry="14.5" fill={`url(#${uid}gold)`} stroke="#5f3f13" strokeWidth="1.5" />
         <ellipse rx="31" ry="10.5" fill="none" stroke="rgba(255,255,255,.5)" strokeWidth="1" />
         <text data-plaque-text textAnchor="middle" dy={initials ? 4.6 : 2.6} fill="#4f310d" style={{ fontFamily: 'var(--body)', fontSize: initials ? 13 : 6.8, fontWeight: 650, letterSpacing: '.17em' }}>{initials || 'MAYLUNE'}</text>
       </g>
@@ -340,6 +411,15 @@ function CheckIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>;
 }
 
+function ViewToggle({ worn, onChange, height }) {
+  return (
+    <div className="view-toggle" role="group" aria-label="Vue de l’aperçu">
+      <button type="button" className={worn ? '' : 'active'} onClick={() => onChange(false)} aria-pressed={!worn}>Le sac</button>
+      <button type="button" className={worn ? 'active' : ''} onClick={() => onChange(true)} aria-pressed={worn}>À l’épaule <b>{height} cm</b></button>
+    </div>
+  );
+}
+
 function SparkIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 4.6 4.6 1.9-4.6 1.9L12 16.5l-1.9-4.6L5.5 10l4.6-1.9z" /><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z" /></svg>;
 }
@@ -427,6 +507,7 @@ export default function Home() {
   const [cartHydrated, setCartHydrated] = useState(false);
   const [checkoutState, setCheckoutState] = useState('idle');
   const [shareState, setShareState] = useState('idle');
+  const [wornView, setWornView] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(products[1]);
   const [zones, setZones] = useState(curatedRecipes[0].zones);
   const [activeZone, setActiveZone] = useState('body');
@@ -781,8 +862,11 @@ export default function Home() {
           <div className="config-visual">
             <figure className="main-preview">
               <div className="preview-stage">
-                <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />
+                {wornView
+                  ? <WornPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} title={`${previewTitle}, porté à l’épaule`} />
+                  : <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />}
               </div>
+              <ViewToggle worn={wornView} onChange={setWornView} height={wornSetup[selectedProduct.id].height} />
               <div className="recipe-edge" style={{ background: recipeGradient }} />
               <figcaption><div><span>Votre base</span><strong>{selectedProduct.name}</strong></div><div><span>Votre recette</span><strong className="figcaption-recipe">{recipeLabel}</strong></div></figcaption>
             </figure>
@@ -791,8 +875,11 @@ export default function Home() {
           <div className="config-panel" id="config-start">
             <figure className="mobile-config-preview">
               <div className="preview-stage">
-                <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />
+                {wornView
+                  ? <WornPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} title={`${previewTitle}, porté à l’épaule`} />
+                  : <BagPreview shapeId={selectedProduct.id} zones={zones} finishes={selectedFinishes} initials={initials} title={previewTitle} />}
               </div>
+              <ViewToggle worn={wornView} onChange={setWornView} height={wornSetup[selectedProduct.id].height} />
               <div className="recipe-edge" style={{ background: recipeGradient }} />
               <figcaption><span>{selectedProduct.name}</span><strong className="figcaption-recipe">{recipeLabel}</strong></figcaption>
             </figure>
